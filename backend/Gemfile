@@ -13,9 +13,9 @@ gem 'rails', '~> 6.1.4'
 gem 'redis', '~> 4.0'
 
 gem 'action_policy'
-gem 'devise'
 gem 'jwt_sessions'
 gem 'rolify'
+gem 'sorcery'
 
 gem 'activerecord-pg_enum'
 gem 'acts_as_list'
