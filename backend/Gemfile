@@ -1,0 +1,45 @@
+source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+ruby '2.7.0'
+
+gem 'bootsnap', '>= 1.4.4', require: false
+gem 'dotenv'
+gem 'image_processing', '~> 1.2'
+gem 'pg', '~> 1.1'
+gem 'puma', '~> 5.0'
+gem 'rack-cors'
+gem 'rails', '~> 6.1.4'
+gem 'redis', '~> 4.0'
+
+gem 'action_policy'
+gem 'devise'
+gem 'jwt_sessions'
+gem 'rolify'
+
+gem 'activerecord-pg_enum'
+gem 'acts_as_list'
+gem 'acts-as-taggable-on'
+gem 'paper_trail'
+
+gem 'action_policy-graphql'
+gem 'graphql'
+gem 'graphql-batch'
+gem 'graphql_playground-rails', group: :development
+
+group :development, :test do
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'factory_bot_rails'
+  gem 'rspec-rails'
+end
+
+group :development do
+  gem 'faker'
+  gem 'listen', '~> 3.3'
+  gem 'rubocop'
+  gem 'rubocop-graphql'
+  gem 'rubocop-rails'
+  gem 'spring'
+end
+
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

@@ -1,0 +1,16 @@
+require:
+  - rubocop-rails
+  - rubocop-graphql
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Metrics/AbcSize:
+  CountRepeatedAttributes: false
+  Max: 25
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
