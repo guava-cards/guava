@@ -1,10 +1,12 @@
 class User < ApplicationRecord
   authenticates_with_sorcery!
 
-  def self.authenticate(login, password)
-    user = find_for_authentication(login)
-    return user if user&.valid_password?(password)
-  end
+  validates :email, presence: true, uniqueness: true
+  validates :username, presence: true, uniqueness: true, format: { with: /^[a-zA-Z0-9_.]*$/, multiline: true }
+
+  validates :password, length: { minimum: 8 }, if: -> { new_record? || changes[:crypted_password] }
+  validates :password, confirmation: true, if: -> { new_record? || changes[:crypted_password] }
+  validates :password_confirmation, presence: true, if: -> { new_record? || changes[:crypted_password] }
 
   def self.find_for_authentication(login)
     User.where(email: login.downcase)

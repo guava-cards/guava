@@ -1,6 +1,6 @@
 module Queries
   module Auth
-    class IdentityCheckQuery < BaseQuery
+    class IdentityCheckQuery < Queries::BaseQuery
       description 'Checks to see if an identity (.i.e. a user) exists with a given login'
 
       class IdentityType < Types::BaseEnum

@@ -2,6 +2,7 @@ module JwtAuth
   module_function
 
   def create_auth_token_for_user(user)
+    return nil if user.blank?
     create_session_for_user(user).login
   end
 
