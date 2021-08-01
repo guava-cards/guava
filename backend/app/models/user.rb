@@ -21,4 +21,13 @@ class User < ApplicationRecord
   def jwt_payload
     { user_id: id }
   end
+
+  def send_activation_email!
+    return false unless send_activation_needed_email?
+
+    setup_activation
+    return false unless save
+
+    send_activation_needed_email!
+  end
 end
