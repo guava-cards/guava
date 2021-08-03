@@ -1,0 +1,37 @@
+overwrite: true
+schema: 'http://localhost:3000/graphql'
+documents:
+  - 'src/**/*.graphql'
+    # loader: codegen-documents-loader.js
+  - 'src/**/*.gql'
+    # loader: codegen-documents-loader.js
+generates:
+  src/generated/graphql.tsx:
+    config:
+      withHooks: true
+      withComponent: false
+      useTypeImports: true
+      dedupeFragments: true
+    plugins:
+      - add:
+          content: '/* eslint-disable */'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-urql'
+
+  src/generated/instrospection.ts:
+    config:
+      useTypeImports: true
+
+    plugins:
+      - add:
+          content: '/* eslint-disable */'
+      - 'urql-introspection'
+
+  ./graphql.schema.json:
+    plugins:
+      - 'introspection'
+
+  ../graphql.schema.json:
+    plugins:
+      - 'introspection'

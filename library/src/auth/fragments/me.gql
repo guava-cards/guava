@@ -1,0 +1,3 @@
+fragment Me on User {
+  id
+}

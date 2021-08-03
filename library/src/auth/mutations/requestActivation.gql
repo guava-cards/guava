@@ -1,0 +1,5 @@
+mutation RequestActivation($email: String!) {
+  requestAccountActivation(input: { email: $email }) {
+    requested
+  }
+}
