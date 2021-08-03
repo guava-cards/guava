@@ -1,1 +1,1 @@
-export {}
+export * as URLs from './urls'
