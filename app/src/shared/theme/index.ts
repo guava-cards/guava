@@ -25,8 +25,7 @@ const theme = extendTheme({
     Alert,
   },
   config: {
-    initialColorMode:
-      typeof window !== 'undefined' ? (window as any).colorMode : 'light',
+    initialColorMode: 'light',
     cssVarPrefix: 'gc',
   },
 })

@@ -1,12 +1,19 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "jsx": "react-jsx",
+    "jsx": "react",
     "baseUrl": ".",
     "paths": {
       "~/*": ["./*"]
     }
   },
-  "include": ["./src", "vite.config.ts", "src/shared/pages/.page.server.tsx", "src/shared/pages/.page.client.tsx"],
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "CommonJS",
+      "esModuleInterop": true
+    }
+  },
+  "include": ["./src", "vite.config.ts", "./server"],
   "exclude": ["**/node_modules/**"]
 }

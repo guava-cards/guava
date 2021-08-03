@@ -7,4 +7,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
   plugins: [reactRefresh(), reactJsx(), VitePWA()],
+  optimizeDeps: {
+    exclude: ['lodash.mergeWith', 'tinycolor2'],
+  },
 })

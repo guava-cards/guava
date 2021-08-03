@@ -1,9 +1,10 @@
 import { Box } from '@chakra-ui/react'
-import React, { Suspense } from 'react'
+import React from 'react'
 import { Breadcrumb, BreadcrumbsProvider } from '../../context/breadcrumbs'
 import { WIDTH as SIDEBAR_WIDTH, DashboardSidebar } from './sidebar'
 import { DashboardHeader } from './header'
 import { DashboardLoading } from './loading'
+import { Suspense } from '../../components/suspense'
 
 export interface DashboardLayoutProps {
   withSidebar?: boolean

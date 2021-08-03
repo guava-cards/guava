@@ -1,7 +1,11 @@
-import React, { Suspense } from 'react'
+import React from 'react'
+import { Switch, Route } from 'react-router-dom'
 import { lazy } from '@loadable/component'
-import { Route } from 'react-router-dom'
+import { wrapInLayout } from './layouts'
+import { HomePage } from './views'
+import { NotFound } from './views/not-found'
 import { routes as authRoutes } from '../auth/routes'
+import { Suspense } from './components/suspense'
 
 export const routes = [...authRoutes].map(route => {
   const FallbackComponent = route.Component ? route.Component : null
@@ -23,3 +27,15 @@ export const routes = [...authRoutes].map(route => {
     </Route>
   )
 })
+
+export const Routes = () => (
+  <Switch>
+    <Route
+      exact
+      path="/"
+      render={() => wrapInLayout(HomePage, 'with-dashboard-sidebar')}
+    />
+    {routes}
+    <Route component={NotFound} />
+  </Switch>
+)
