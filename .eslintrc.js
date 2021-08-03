@@ -56,5 +56,14 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     'prettier/prettier': 'warn',
     'react/require-default-props': 'off', // just define default props in function
+    'import/extensions': 'off',
+  },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+    },
+    'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
   },
 }

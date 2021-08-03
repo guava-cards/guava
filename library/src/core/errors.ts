@@ -13,7 +13,10 @@ export class NotFoundError extends DomainError {
 }
 
 export class AuthenticationError extends DomainError {
-  constructor(message = 'You must sign in to continue') {
+  constructor(
+    message = 'You must sign in to continue',
+    public redirectTo?: string
+  ) {
     super(message, 'authentication')
   }
 }

@@ -28,7 +28,6 @@ async function main() {
     const url = req.originalUrl
     const pageContext = {
       url,
-      req,
       headers: req.headers,
     }
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
-import React, { createContext } from 'react'
+import React, { createContext, useContext } from 'react'
 import { useCookies } from 'react-cookie'
-import { MeFragment, useViewerQuery } from '@guava/library'
+import { MeFragment, useViewerQuery, AuthenticationError } from '@guava/library'
 
 export interface AuthContextValue {
   csrfToken: string
@@ -28,4 +28,27 @@ export const AuthProvider: React.FC = ({ children }) => {
   )
 }
 
-export function useCurrentUser() {}
+export function useAuth() {
+  return useContext(AuthContext)
+}
+
+interface UseAuthenticatedViewerConfig {
+  unauthenticatedRedirectTo?: string
+}
+
+export function useAuthenticatedViewer({
+  unauthenticatedRedirectTo,
+}: UseAuthenticatedViewerConfig = {}) {
+  const { viewer } = useAuth()
+  if (!viewer) {
+    throw new AuthenticationError(undefined, unauthenticatedRedirectTo)
+  }
+
+  return viewer
+}
+
+export function useAuthenticatedResource(
+  config?: UseAuthenticatedViewerConfig
+) {
+  useAuthenticatedViewer(config)
+}

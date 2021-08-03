@@ -1,6 +1,8 @@
 import React from 'react'
+import { useAuthenticatedResource } from '~/auth/context'
 
-const HomePage = () => <h1>Hello world</h1>
+export const HomePage = () => {
+  useAuthenticatedResource()
 
-export const Page = HomePage
-export { HomePage }
+  return <h1>Hello world</h1>
+}
