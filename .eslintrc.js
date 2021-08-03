@@ -19,7 +19,6 @@ module.exports = {
   plugins: ['graphql', 'prettier'],
   rules: {
     'class-methods-use-this': 'off',
-    'import/no-default-export': 'error',
     'import/prefer-default-export': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'react/react-in-jsx-scope': 'off',

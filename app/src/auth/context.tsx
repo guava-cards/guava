@@ -1,31 +1,31 @@
 /* eslint-disable no-underscore-dangle */
-import React, { createContext, useMemo } from 'react'
+import React, { createContext } from 'react'
 import { useCookies } from 'react-cookie'
-import { useViewerQuery } from '@guava/library'
+import { MeFragment, useViewerQuery } from '@guava/library'
 
 export interface AuthContextValue {
   csrfToken: string
-  authenticated: boolean
+  viewer?: MeFragment
 }
 
 export const AuthContext = createContext({} as AuthContextValue)
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const [data] = useViewerQuery({
-    context: useMemo(() => ({ suspense: true }), []),
-  })
+  const [{ data }] = useViewerQuery()
   const [cookies] = useCookies(['_authenticated', 'csrf-token'])
   const csrfToken = cookies.csrf_token
-  const isAuthenticated = cookies._authenticated?.toString() === 'true'
+  const viewer = data?.viewer
 
   return (
     <AuthContext.Provider
       value={{
         csrfToken,
-        authenticated: isAuthenticated,
+        viewer,
       }}
     >
       {children}
     </AuthContext.Provider>
   )
 }
+
+export function useCurrentUser() {}

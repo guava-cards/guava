@@ -1,19 +1,15 @@
-import {
-  ChakraProvider,
-  ColorMode,
-  ColorModeScript,
-  cookieStorageManager,
-} from '@chakra-ui/react'
+import { ChakraProvider, ColorMode } from '@chakra-ui/react'
 import { Cookies, CookiesProvider } from 'react-cookie'
-import React, { Suspense } from 'react'
+import React from 'react'
 import { Provider as UrqlProvider } from 'urql'
 import { urqlClient } from '@guava/library'
 import { AuthProvider } from '../auth/context'
 import { theme } from './theme'
 import { DynamicColorMode } from './theme/DynamicColorMode'
 import { AppFallback } from './app-fallback'
-import { Router } from './router'
 import { GlobalStyles } from './components/global-styles'
+import { Routes } from './app-routes'
+import { Suspense } from './components/suspense'
 
 interface AppProps {
   cookies?: string
@@ -22,17 +18,13 @@ interface AppProps {
 
 export const App: React.FC<AppProps> = ({ cookies }) => (
   <React.StrictMode>
-    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
     <CookiesProvider cookies={new Cookies(cookies)}>
-      <ChakraProvider
-        theme={theme}
-        colorModeManager={cookieStorageManager(cookies)}
-      >
+      <ChakraProvider theme={theme}>
         <DynamicColorMode>
           <UrqlProvider value={urqlClient}>
             <Suspense fallback={<AppFallback />}>
               <AuthProvider>
-                <Router />
+                <Routes />
               </AuthProvider>
             </Suspense>
           </UrqlProvider>
