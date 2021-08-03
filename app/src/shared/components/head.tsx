@@ -6,7 +6,10 @@ export interface HeadProps {
   description?: string
 }
 
-export const Head: React.FC<HeadProps> = ({ title, description }) => (
+export const Head: React.FC<HeadProps> = ({
+  title,
+  description = 'Flashcard learning',
+}) => (
   <Helmet defaultTitle="Guava" titleTemplate="%s | Guava">
     <meta charSet="utf-8" />
     <meta name="description" content={description} />

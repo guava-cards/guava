@@ -10,6 +10,7 @@ import { AppFallback } from './app-fallback'
 import { GlobalStyles } from './components/global-styles'
 import { Routes } from './app-routes'
 import { Suspense } from './components/suspense'
+import { Head } from './components/head'
 
 interface AppProps {
   cookies?: string
@@ -24,6 +25,7 @@ export const App: React.FC<AppProps> = ({ cookies }) => (
           <UrqlProvider value={urqlClient}>
             <Suspense fallback={<AppFallback />}>
               <AuthProvider>
+                <Head />
                 <Routes />
               </AuthProvider>
             </Suspense>
