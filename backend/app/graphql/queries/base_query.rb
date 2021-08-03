@@ -1,6 +1,9 @@
 module Queries
   class BaseQuery < GraphQL::Schema::Resolver
     extend GraphQL::Schema::Member::HasFields
+
+    include Common::Resolver
+    include Common::Methods
     # extend GraphQL::Schema::Resolver::HasPayloadType
 
     class << self

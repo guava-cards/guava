@@ -2,6 +2,7 @@ module Mutations
   module Auth
     class LoginMutation < BaseMutation
       description 'Creates a new authentication session for a user'
+      authenticate false
 
       class LoginFailure < Types::BaseEnum
         graphql_name 'UserLoginFailure'
@@ -20,19 +21,17 @@ module Mutations
       argument :password, String, "The user's password", required: true
 
       def resolve(login:, password:)
-        result = {}
-
         User.authenticate(login, password) do |user, failure|
           user = nil if failure.present?
-
-          result = {
+          @result = {
             user: user,
             auth_token: JwtAuth.create_auth_token_for_user(user),
             failure_reason: failure
           }
         end
 
-        result
+        context.assign_auth_token_cookies(@result[:auth_token])
+        @result
       end
     end
   end

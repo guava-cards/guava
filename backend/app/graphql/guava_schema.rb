@@ -1,12 +1,18 @@
 class GuavaSchema < GraphQL::Schema
+  include Common::ErrorHandling
+
   mutation(Types::MutationType)
   query(Types::QueryType)
 
   # GraphQL::Batch setup:
   use GraphQL::Batch
+  context_class QueryContext
+  max_complexity 200
+  max_depth 20
+  default_max_page_size 20
 
   # Union and Interface Resolution
-  def self.resolve_type(abstract_type, obj, ctx)
+  def self.resolve_type(_abstract_type, _obj, _ctx)
     # TODO: Implement this function
     # to return the correct object type for `obj`
     raise(GraphQL::RequiredImplementationMissingError)

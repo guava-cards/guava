@@ -5,5 +5,6 @@ module Types
     include GraphQL::Types::Relay::HasNodesField
 
     field :check_if_user_exists, resolver: Queries::Auth::IdentityCheckQuery
+    field :viewer, resolver: Queries::ViewerQuery
   end
 end
