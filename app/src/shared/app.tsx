@@ -13,6 +13,7 @@ import { theme } from './theme'
 import { DynamicColorMode } from './theme/DynamicColorMode'
 import { AppFallback } from './app-fallback'
 import { Router } from './router'
+import { GlobalStyles } from './components/global-styles'
 
 interface AppProps {
   cookies?: string
@@ -36,6 +37,7 @@ export const App: React.FC<AppProps> = ({ cookies }) => (
             </Suspense>
           </UrqlProvider>
         </DynamicColorMode>
+        <GlobalStyles />
       </ChakraProvider>
     </CookiesProvider>
   </React.StrictMode>
