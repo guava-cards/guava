@@ -10,7 +10,7 @@ async function hydrate() {
   const { Page } = pageContext
   const cache = createCache({ key: 'gc' })
 
-  ReactDOM.hydrate(
+  ReactDOM.render(
     <CacheProvider value={cache}>
       <BrowserRouter>
         <Page {...pageContext.pageProps} />

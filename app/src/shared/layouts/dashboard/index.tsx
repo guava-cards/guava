@@ -5,6 +5,7 @@ import { WIDTH as SIDEBAR_WIDTH, DashboardSidebar } from './sidebar'
 import { DashboardHeader } from './header'
 import { DashboardLoading } from './loading'
 import { Suspense } from '../../components/suspense'
+import { Head } from '../../components/head'
 
 export interface DashboardLayoutProps {
   withSidebar?: boolean
@@ -22,6 +23,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 }) => (
   <BreadcrumbsProvider crumbs={initialCrumbs}>
     <Box d="flex" h="full">
+      <Head title="🏡 Home" />
       {withSidebar && <DashboardSidebar />}
       <Suspense fallback={<DashboardLoading />}>
         <Box ml={withSidebar ? SIDEBAR_WIDTH : 0} p={4}>

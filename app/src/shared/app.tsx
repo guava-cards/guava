@@ -23,10 +23,7 @@ interface AppProps {
 export const App: React.FC<AppProps> = ({ cookies }) => (
   <React.StrictMode>
     <CookiesProvider cookies={new Cookies(cookies)}>
-      <ChakraProvider
-        theme={theme}
-        colorModeManager={cookieStorageManager(cookies)}
-      >
+      <ChakraProvider theme={theme}>
         <DynamicColorMode>
           <UrqlProvider value={urqlClient}>
             <Suspense fallback={<AppFallback />}>
