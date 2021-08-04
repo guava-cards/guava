@@ -11,6 +11,7 @@ gem 'puma', '~> 5.0'
 gem 'rack-cors'
 gem 'rails', '~> 6.1.4'
 gem 'redis', '~> 4.0'
+gem 'sidekiq'
 
 gem 'action_policy'
 gem 'jwt_sessions'

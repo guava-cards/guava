@@ -1,0 +1,121 @@
+# version: '3'
+# services:
+#   base: &base
+#     build:
+#       args:
+#         RUBY_VERSION: '2.7.0'
+#         BUNDLE_VERSION: '2.2.17'
+#       context: .
+#       dockerfile: ./Dockerfile
+
+#   backend: &backend
+#     <<: *base
+#     volumes:
+#       - .:/app:cached
+#       - rails_cache:/app/tmp/cache
+#       - bundle:/usr/local/bundle
+#     depends_on:
+#       - postgres
+#       - redis
+
+#   app:
+#     <<: *backend
+#     command: bundle exec rails s -p 3000 -b 0.0.0.0
+#     ports:
+#       - '3000:3000'
+#     env_file: .env
+
+#   postgres:
+#     image: postgres:13.2
+#     ports:
+#       - '5432:5435'
+#     env_file: .env.postgres
+#     volumes:
+#       - postgres:/var/lib/postgresql/data
+
+#   redis:
+#     image: redis:latest
+#     ports:
+#       - '6379:6380'
+#     volumes:
+#       - 'redis_conf:/usr/local/etc/redis/redis.conf:ro'
+#       - 'redis_data:/data:delegated'
+
+#   # sidekiq:
+#   #   <<: *backend
+#   #   command: bundle exec sidekiq
+#   #   env_file: .env
+
+# volumes:
+#   rails_cache:
+#   bundle:
+#   postgres:
+#   redis_conf:
+#   redis_data:
+
+version: '3'
+networks:
+  development:
+  test:
+
+volumes:
+  postgres:
+  rails_cache:
+  bundle_cache:
+  shared_data:
+
+services:
+  redis:
+    image: 'redis:latest'
+    command: redis-server
+    container_name: guava_redis
+    networks:
+      - development
+      - test
+    volumes:
+      - shared_data:/var/shared/redis
+    ports:
+      - 6379:6380
+
+  postgres:
+    image: 'postgres:13.2'
+    container_name: guava_db
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - shared_data:/var/shared
+    networks:
+      - development
+      - test
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5099
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        RUBY_VERSION: '2.7.0'
+        BUNDLE_VERSION: '2.2.25'
+    container_name: guava_app
+    volumes:
+      - .:/var/app:cached
+      - rails_cache:/var/app/tml/cache
+      - bundle_cache:/usr/local/bundle/gems
+      - shared_data:/var/shared
+    networks:
+      - development
+    ports:
+      - 3000:3000
+    stdin_open: true
+    tty: true
+    env_file: .env.development
+    entrypoint: dev-entrypoint.sh
+    command: ['rails', 'server', '-p', '3000', '-b', '0.0.0.0']
+    environment:
+      RAILS_ENV: development
+    depends_on:
+      - postgres
+      - redis

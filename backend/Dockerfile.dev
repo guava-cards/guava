@@ -1,0 +1,81 @@
+# # Add env variables
+# ARG RUBY_VERSION
+# ARG BUNDLE_VERSION
+
+# # Load ruby image
+# FROM ruby:${RUBY_VERSION}
+# LABEL MAINTAINER=hey@jesseono.me
+
+# # Update Depdendencies
+# RUN apt-get update -yqq
+
+# # Install required dependencies (for native extensions)
+# RUN apt-get install build-essential -yqq
+
+# # Install extra dependencies
+# RUN apt-get install -yqq \
+#   nodejs \
+#   yarn \
+#   imagemagick
+
+# # Copy Gemfile and install gems
+# COPY Gemfile Gemfile.lock ./
+# RUN gem update --system
+# RUN gem install bundler
+# RUN bundle install 
+
+# # Create app directory
+# RUN mkdir -p /app
+# WORKDIR /app
+
+# # Set entrypoint
+# COPY ./docker-entry.sh /usr/bin
+# RUN chmod +x /usr/bin/docker-entry.sh
+# ENTRYPOINT [ "docker-entry.sh" ]
+
+ARG RUBY_VERSION
+ARG BUNDLE_VERSION
+
+FROM ruby:${RUBY_VERSION}-alpine
+
+ENV APP_PATH /var/app
+ENV TMP_PATH /tmp
+ENV BUNDLE_PATH /usr/local/bundle/gems
+ENV RAILS_LOG_TO_STDOUT true
+ENV RAILS_PORT 3000
+
+COPY ./dev-docker-entry.sh /usr/local/bin/dev-entrypoint.sh
+RUN chmod +x /usr/local/bin/dev-entrypoint.sh
+
+RUN apk add --update --virtual \
+  runtime-deps \
+  bash \
+  postgresql-client \
+  build-base \
+  libxml2-dev \
+  libxslt-dev \
+  nodejs \
+  yarn \
+  libffi-dev \
+  readline \
+  build-base \
+  postgresql-dev \
+  sqlite-dev \
+  libc-dev \
+  linux-headers \
+  readline-dev \
+  file \
+  imagemagick \
+  git \
+  tzdata \
+  && rm -rf /var/cache/apk/*
+
+RUN mkdir -p $APP_PATH
+
+RUN gem install bundler --version "$BUNDLE_VERSION"
+RUN rm -rf $GEM_HOME/cache/*
+
+WORKDIR ${APP_PATH}
+EXPOSE ${RAILS_PORT}
+
+ENTRYPOINT [ "bundle", "exec" ]
