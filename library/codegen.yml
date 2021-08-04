@@ -19,7 +19,7 @@ generates:
       - 'typescript-operations'
       - 'typescript-urql'
 
-  src/generated/instrospection.ts:
+  src/generated/introspection.ts:
     config:
       useTypeImports: true
 

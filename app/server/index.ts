@@ -37,6 +37,12 @@ async function main() {
       return
     }
 
+    const renderResult = result.renderResult as Record<string, never> | string
+    if (typeof renderResult !== 'string' && renderResult.redirectTo) {
+      res.redirect(renderResult.redirectTo)
+      return
+    }
+
     res.status(result.statusCode).send(result.renderResult)
   })
 

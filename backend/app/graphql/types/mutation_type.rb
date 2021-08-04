@@ -4,6 +4,7 @@ module Types
     description 'The root mutation type'
 
     field :activate_account, mutation: Mutations::Auth::ActivateAccountMutation
+    field :identity_check, mutation: Mutations::Auth::IdentityCheckMutation
     field :login_user, mutation: Mutations::Auth::LoginMutation
     field :refresh_access_token, mutation: Mutations::Auth::RefreshAccessTokenMutation
     field :request_account_activation, mutation: Mutations::Auth::RequestActivationLinkMutation

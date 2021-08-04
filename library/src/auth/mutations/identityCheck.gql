@@ -1,0 +1,8 @@
+mutation IdentityCheck(
+  $identity: String!
+  $identityType: IdentityType = LOGIN
+) {
+  identityCheck(input: { identity: $identity, identityType: $identityType }) {
+    exists
+  }
+}

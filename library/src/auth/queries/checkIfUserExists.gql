@@ -1,9 +1,0 @@
-query CheckIfUserExists(
-  $identity: String!
-  $identityType: IdentityType = LOGIN
-) {
-  userExists: checkIfUserExists(
-    identity: $identity
-    identityType: $identityType
-  )
-}

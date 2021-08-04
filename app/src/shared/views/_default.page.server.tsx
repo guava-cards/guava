@@ -1,28 +1,49 @@
 import 'cross-fetch/polyfill'
 import React from 'react'
 import crypto from 'crypto'
-import { renderToString } from 'react-dom/server'
+import { renderToStaticMarkup } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom'
 import { renderToStringAsync } from 'react-async-ssr'
 import { html } from 'vite-plugin-ssr'
-import { urqlSsr } from '@guava/library'
+import {
+  urqlSsr,
+  AuthenticationError,
+  DomainError,
+  NotFoundError,
+} from '@guava/library'
 import ssrPrepass from 'react-ssr-prepass'
 import createCache from '@emotion/cache'
 import { CacheProvider } from '@emotion/react'
+import superjson from 'superjson'
 import { Helmet } from 'react-helmet'
 import Cookies from 'universal-cookie'
 import { ColorModeScript } from '@chakra-ui/react'
+import { PageContext } from '../typings/ssr'
+import { errorRedirects } from '../utils/error-redirects'
 
 export { render }
 export { passToClient }
 
 const passToClient = ['pageProps']
 
-async function render(pageContext) {
-  const { Page, pageProps, url, headers } = pageContext
+superjson.registerClass(AuthenticationError)
+superjson.registerClass(NotFoundError)
+superjson.registerClass(DomainError)
+superjson.registerClass(Error)
+
+async function render(pageContext: PageContext) {
+  const { Page, pageProps = {}, url, headers, _err: error } = pageContext
 
   const key = 'gc'
   const cache = createCache({ key })
+
+  const redirect = error && errorRedirects(error)
+  if (redirect) {
+    return { redirectTo: redirect }
+  }
+
+  pageProps.error = error ? superjson.stringify(error) : null
+  pageProps.cookies = headers.cookie
 
   const element = (
     <CacheProvider value={cache}>
@@ -43,7 +64,7 @@ async function render(pageContext) {
   const createNonce = () => crypto.randomBytes(16).toString('base64')
 
   const colorMode = cookies.get('chakra-ui-color-mode') ?? 'light'
-  const colorModeScriptHtml = renderToString(
+  const colorModeScriptHtml = renderToStaticMarkup(
     <ColorModeScript
       initialColorMode={cookies.get('chakra-ui-color-mode')}
       nonce={createNonce()}
@@ -74,7 +95,7 @@ async function render(pageContext) {
           window.__URQL_DATA__ = ${html.dangerouslySkipEscape(data)}
           window.__APP_DATA__ = {
             csrf: ${cookies.get('csrf_token')
-              ? `"${cookies.get('csrf_token')}"`
+              ? html.dangerouslySkipEscape(`"${cookies.get('csrf_token')}"`)
               : 'undefined'},
             colorMode: '${cookies.get('chakra-ui-color-mode')}',
           }

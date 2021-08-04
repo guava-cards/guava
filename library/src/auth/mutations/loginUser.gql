@@ -3,9 +3,7 @@ mutation LoginUser($login: String!, $password: String!) {
     failureReason
 
     user {
-      id
-      email
-      createdAt
+      ...Me
     }
   }
 }

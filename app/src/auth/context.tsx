@@ -16,6 +16,8 @@ export const AuthProvider: React.FC = ({ children }) => {
   const csrfToken = cookies.csrf_token
   const viewer = data?.viewer
 
+  console.log(data)
+
   return (
     <AuthContext.Provider
       value={{

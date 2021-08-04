@@ -1,7 +1,8 @@
-module Queries
+module Mutations
   module Auth
-    class IdentityCheckQuery < Queries::BaseQuery
+    class IdentityCheckMutation < BaseMutation
       description 'Checks to see if an identity (.i.e. a user) exists with a given login'
+      authenticate false
 
       class IdentityType < Types::BaseEnum
         graphql_name 'IdentityType'
@@ -13,17 +14,19 @@ module Queries
 
       argument :identity, String, 'The value of the identity', required: true
       argument :identity_type, IdentityType, 'The type of identity to check for', required: true
-      type Boolean, null: false
+      field :exists, Boolean, 'Whether the identity was present or not', null: false
 
       def resolve(identity:, identity_type:)
-        case identity_type
-        when 'EMAIL'
-          User.find_by(email: identity.downcase).present?
-        when 'USERNAME'
-          User.find_by(username: identity.downcase).present?
-        when 'LOGIN'
-          User.find_for_authentication(identity).present?
-        end
+        exists = case identity_type
+                 when 'EMAIL'
+                   User.find_by(email: identity.downcase).present?
+                 when 'USERNAME'
+                   User.find_by(username: identity.downcase).present?
+                 when 'LOGIN'
+                   User.find_for_authentication(identity).present?
+                 end
+
+        { exists: exists }
       end
     end
   end

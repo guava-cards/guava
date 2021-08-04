@@ -1,7 +1,11 @@
 /* eslint-disable max-classes-per-file */
 
 export class DomainError<E = Record<string, unknown>> extends Error {
-  constructor(message: string, public code: string, public extensions?: E) {
+  constructor(
+    public message: string,
+    public code: string,
+    public extensions?: E
+  ) {
     super(message)
   }
 }
@@ -14,7 +18,7 @@ export class NotFoundError extends DomainError {
 
 export class AuthenticationError extends DomainError {
   constructor(
-    message = 'You must sign in to continue',
+    public message = 'You must sign in to continue',
     public redirectTo?: string
   ) {
     super(message, 'authentication')
