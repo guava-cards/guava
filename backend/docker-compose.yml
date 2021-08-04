@@ -75,7 +75,7 @@ services:
     volumes:
       - shared_data:/var/shared/redis
     ports:
-      - 6379:6380
+      - 6380:6379
 
   postgres:
     image: 'postgres:13.2'
@@ -88,9 +88,9 @@ services:
       - test
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: postgres
     ports:
-      - 5432:5099
+      - 5099:5432
 
   app:
     build:
