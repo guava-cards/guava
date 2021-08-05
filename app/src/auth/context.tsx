@@ -1,28 +1,32 @@
 /* eslint-disable no-underscore-dangle */
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { MeFragment, useViewerQuery, AuthenticationError } from '@guava/library'
 
 export interface AuthContextValue {
   csrfToken: string
   viewer?: MeFragment
+  setViewer: (viewer: MeFragment) => void
+  setCsrfToken: (token: string) => void
 }
 
 export const AuthContext = createContext({} as AuthContextValue)
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const [{ data }] = useViewerQuery()
-  const [cookies] = useCookies(['_authenticated', 'csrf-token'])
+  const [{ data }] = useViewerQuery({
+    requestPolicy: 'network-only',
+  })
+  const [cookies, setCookie] = useCookies(['_authenticated', 'csrf_token'])
   const csrfToken = cookies.csrf_token
-  const viewer = data?.viewer
-
-  console.log(data)
+  const [viewer, setViewer] = useState(() => data?.viewer)
 
   return (
     <AuthContext.Provider
       value={{
         csrfToken,
         viewer,
+        setCsrfToken: token => setCookie('csrf_token', token),
+        setViewer,
       }}
     >
       {children}
@@ -32,6 +36,11 @@ export const AuthProvider: React.FC = ({ children }) => {
 
 export function useAuth() {
   return useContext(AuthContext)
+}
+
+export function useIsAuthenticated() {
+  const { viewer } = useAuth()
+  return !!viewer
 }
 
 interface UseAuthenticatedViewerConfig {

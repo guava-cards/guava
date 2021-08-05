@@ -45,7 +45,7 @@ export function createUrqlClient(cookies?: string) {
     credentials: 'include',
   })
 
-  if (!isServerSide() && client) return client
+  if (client) return client
 
   client = createClient({
     url: 'http://localhost:3000/graphql',
@@ -54,10 +54,10 @@ export function createUrqlClient(cookies?: string) {
       dedupExchange,
       retryExchange({}),
       refocusExchange(),
-      cache,
+      cache as never,
       urqlSsr,
       fetchExchange,
-    ],
+    ].filter(Boolean),
     fetchOptions,
   })
 

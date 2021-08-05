@@ -6,6 +6,7 @@ import { HomePage } from './views'
 import { NotFound } from './views/not-found'
 import { routes as authRoutes } from '../auth/routes'
 import { Suspense } from './components/suspense'
+import { ProtectedRoute } from './components/protected-route'
 
 export const routes = [...authRoutes].map(route => {
   const FallbackComponent = route.Component ? route.Component : null
@@ -31,7 +32,7 @@ export const routes = [...authRoutes].map(route => {
 export const Routes: React.FC = ({ children }) => (
   <Switch>
     {children}
-    <Route
+    <ProtectedRoute
       exact
       path="/"
       render={() => wrapInLayout(HomePage, 'with-dashboard-sidebar')}

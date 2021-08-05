@@ -8,6 +8,7 @@ declare interface RouteConfig {
   exact?: boolean
   sensitive?: boolean
   strict?: string
+  protected?: boolean
   Component?: React.ComponentType
   layout?: React.ComponentType | ViewLayout
   importComponent?: () => Promise<React.ComponentType>

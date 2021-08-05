@@ -5,5 +5,13 @@ mutation LoginUser($login: String!, $password: String!) {
     user {
       ...Me
     }
+
+    authToken {
+      ...LoginUser_authToken
+    }
   }
+}
+
+fragment LoginUser_authToken on AuthToken {
+  csrf
 }

@@ -16,6 +16,7 @@
     "path-to-regexp": "^6.2.0",
     "universal-cookie": "^4.0.4",
     "urql": "^2.0.4",
+    "wonka": "^4.0.15",
     "yup": "^0.32.9"
   },
   "devDependencies": {

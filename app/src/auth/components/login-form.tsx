@@ -7,6 +7,7 @@ import {
   CheckUserSchema,
   IdentityType,
   SignUpUserSchema,
+  LoginUser_AuthTokenFragment,
 } from '@guava/library'
 import { Box, BoxProps, Collapse, VStack } from '@chakra-ui/react'
 import {
@@ -17,7 +18,7 @@ import {
 import { Form, FormSubmit } from '~/shared/components/form'
 
 interface LoginFormProps extends BoxProps {
-  onSuccess?: (user: MeFragment) => void
+  onSuccess?: (user: MeFragment, authToken: LoginUser_AuthTokenFragment) => void
   onFailure?: (failureReason?: string) => void
   step: LoginFormSteps
   setStep: (step: LoginFormSteps) => void
@@ -76,7 +77,8 @@ export const LoginForm = ({
           password: password as string,
         })
         const user = data?.loginUser?.user
-        if (user) return onSuccess?.(user)
+        const authToken = data?.loginUser?.authToken
+        if (user && authToken) return onSuccess?.(user, authToken)
 
         return {
           _formError: data?.loginUser?.failureReason ?? error,

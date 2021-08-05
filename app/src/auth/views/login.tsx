@@ -1,14 +1,22 @@
 import { Box, Heading } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { Head } from '~/shared/components/head'
 import { paths } from '~/shared/paths'
 import { LoginForm } from '../components/login-form'
 import { LoginProviders } from '../components/login-providers'
+import { useAuth, useIsAuthenticated } from '../context'
 
 export const Login = () => {
-  const history = useHistory()
+  const { setCsrfToken, setViewer } = useAuth()
+  const isAuthenticated = useIsAuthenticated()
   const [step, setStep] = useState(LoginForm.Step.CHECK_LOGIN)
+
+  console.log(isAuthenticated)
+
+  if (isAuthenticated) {
+    return <Redirect to={paths.home} />
+  }
 
   return (
     <Box
@@ -34,7 +42,10 @@ export const Login = () => {
       <LoginForm
         step={step}
         setStep={setStep}
-        onSuccess={() => history.push(paths.home)}
+        onSuccess={(viewer, { csrf }) => {
+          setCsrfToken(csrf)
+          setViewer(viewer)
+        }}
       />
     </Box>
   )
