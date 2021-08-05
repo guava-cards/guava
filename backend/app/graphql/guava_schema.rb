@@ -25,7 +25,7 @@ class GuavaSchema < GraphQL::Schema
 
   # Return a string UUID for `object`
   def self.id_from_object(object, _type_definition, _query_ctx)
-    Base64.encode64 object.to_global_id.to_s
+    Base64.urlsafe_encode64 object.to_global_id.to_s
   end
 
   # Given a string UUID, find the object

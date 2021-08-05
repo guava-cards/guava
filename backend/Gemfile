@@ -28,8 +28,10 @@ gem 'graphql'
 gem 'graphql-batch'
 gem 'graphql_playground-rails', group: :development
 gem 'graphql-rails_logger'
+gem 'name_of_person'
 
 group :development, :test do
+  gem 'annotate'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'rspec-rails'

@@ -13,7 +13,14 @@ module Common
       nil
     end
 
-    def authorize!
+    def authorized_viewer
+      authorize_request!
+      viewer
+    rescue JWTSessions::Errors::Error
+      nil
+    end
+
+    def authorize_request!
       authorize_access_request!
     end
 
