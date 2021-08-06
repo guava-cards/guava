@@ -1,12 +1,12 @@
 module Queries
   class ViewerQuery < BaseQuery
     description 'Returns the current authenticated user'
-    authenticate for: :access_request
+    authenticate true
 
     type Types::UserType, null: false
 
     def resolve
-      viewer
+      current_user
     end
   end
 end
