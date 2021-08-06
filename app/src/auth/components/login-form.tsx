@@ -2,12 +2,11 @@ import React, { useMemo } from 'react'
 import {
   MeFragment,
   useIdentityCheckMutation,
-  useLoginUserMutation,
   LoginUserSchema,
   CheckUserSchema,
   IdentityType,
   SignUpUserSchema,
-  LoginUser_AuthTokenFragment,
+  useUpsertUserMutation,
 } from '@guava/library'
 import { Box, BoxProps, Collapse, VStack } from '@chakra-ui/react'
 import {
@@ -15,10 +14,11 @@ import {
   InputControl,
   SubmitButton,
 } from 'formik-chakra-ui'
+import { useAuth as useFirebaseAuth } from 'reactfire'
 import { Form, FormSubmit } from '~/shared/components/form'
 
 interface LoginFormProps extends BoxProps {
-  onSuccess?: (user: MeFragment, authToken: LoginUser_AuthTokenFragment) => void
+  onSuccess?: (user: MeFragment) => void
   onFailure?: (failureReason?: string) => void
   step: LoginFormSteps
   setStep: (step: LoginFormSteps) => void
@@ -37,8 +37,9 @@ export const LoginForm = ({
   setStep,
   ...props
 }: LoginFormProps) => {
+  const auth = useFirebaseAuth()
+  const [, upsertUser] = useUpsertUserMutation()
   const [, checkIfUserExists] = useIdentityCheckMutation()
-  const [, loginUser] = useLoginUserMutation()
 
   const schema = useMemo(() => {
     switch (step) {
@@ -54,13 +55,13 @@ export const LoginForm = ({
   }, [step])
 
   const handleSubmit: FormSubmit<typeof schema> = async ({
-    login,
+    email,
     password,
   }) => {
     try {
       if (step === LoginFormSteps.CHECK_LOGIN) {
         const { data } = await checkIfUserExists({
-          identity: login,
+          identity: email,
           identityType: IdentityType.Email,
         })
         const userExists = data?.identityCheck?.exists === true
@@ -72,17 +73,16 @@ export const LoginForm = ({
       }
 
       if (step === LoginFormSteps.SIGN_IN) {
-        const { data, error } = await loginUser({
-          login,
-          password: password as string,
-        })
-        const user = data?.loginUser?.user
-        const authToken = data?.loginUser?.authToken
-        if (user && authToken) return onSuccess?.(user, authToken)
+        await auth.signInWithEmailAndPassword(email, password as string)
+        const { data, error } = await upsertUser()
+
+        const viewer = data?.upsertUser?.user
+        if (viewer) return onSuccess?.(viewer)
 
         return {
-          _formError: data?.loginUser?.failureReason ?? error,
+          _formError: data?.upsertUser?.failureReason ?? error,
           _failure: true,
+          _validationErrors: data?.upsertUser?.validationErrors?.messages,
         }
       }
 
@@ -99,7 +99,7 @@ export const LoginForm = ({
   return (
     <Form {...props} schema={schema} onSubmit={handleSubmit}>
       <InputControl
-        name="login"
+        name="email"
         label="Email Address"
         inputProps={{
           placeholder: 'Enter email address...',

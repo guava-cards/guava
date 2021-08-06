@@ -10,10 +10,15 @@ import {
 } from 'urql'
 import { isServerSide } from '../helpers'
 import { cache } from './cache'
-import { getCsrfToken } from './csrf'
+import { createAuthExchange } from './auth'
 
 interface UrqlWindow extends Window {
   __URQL_DATA__: Record<string, any>
+}
+
+interface CreateClientConfig {
+  getNewAuthToken?: () => Promise<string | null | undefined>
+  cookies?: string
 }
 
 declare let window: UrqlWindow
@@ -24,27 +29,10 @@ export const urqlSsr = ssrExchange({
   initialState: !isServerSide() ? window.__URQL_DATA__ : undefined,
 })
 
-export function createUrqlClient(cookies?: string) {
-  const headers: RequestInit['headers'] = {
-    Accept: 'application/json',
-  }
-
-  if (getCsrfToken(cookies)) {
-    headers['X-CSRF-Token'] = getCsrfToken(cookies)
-  }
-
-  if (cookies) {
-    headers.Cookie = cookies
-  }
-
-  const fetchOptions = (): RequestInit => ({
-    headers: {
-      ...headers,
-      Accept: 'application/json',
-    },
-    credentials: 'include',
-  })
-
+export function createUrqlClient({
+  getNewAuthToken,
+  cookies,
+}: CreateClientConfig) {
   if (client) return client
 
   client = createClient({
@@ -56,9 +44,9 @@ export function createUrqlClient(cookies?: string) {
       refocusExchange(),
       cache as never,
       urqlSsr,
+      createAuthExchange(getNewAuthToken, cookies),
       fetchExchange,
     ].filter(Boolean),
-    fetchOptions,
   })
 
   return client

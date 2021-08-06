@@ -1,9 +1,8 @@
 import createCache from '@emotion/cache'
-import { CacheProvider } from '@emotion/react'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
 import { getPage } from 'vite-plugin-ssr/client'
+import { AppProviders } from '../app-providers'
 
 async function hydrate() {
   const pageContext = await getPage()
@@ -11,11 +10,9 @@ async function hydrate() {
   const cache = createCache({ key: 'gc' })
 
   ReactDOM.render(
-    <CacheProvider value={cache}>
-      <BrowserRouter>
-        <Page {...pageContext.pageProps} />
-      </BrowserRouter>
-    </CacheProvider>,
+    <AppProviders cache={cache}>
+      <Page {...pageContext.pageProps} />
+    </AppProviders>,
     document.getElementById('root')
   )
 }

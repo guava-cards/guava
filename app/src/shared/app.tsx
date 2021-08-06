@@ -5,6 +5,7 @@ import { Provider as UrqlProvider } from 'urql'
 import { createUrqlClient } from '@guava/library'
 import { useLocation } from 'react-router-dom'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useAuth } from 'reactfire'
 import { AuthProvider } from '../auth/context'
 import { theme } from './theme'
 import { DynamicColorMode } from './theme/DynamicColorMode'
@@ -22,7 +23,17 @@ interface AppProps {
 
 export const App: React.FC<AppProps> = ({ cookies, children }) => {
   const { pathname } = useLocation()
-  const client = useMemo(() => createUrqlClient(cookies), [cookies])
+  const auth = useAuth()
+
+  const getNewAuthToken = async () => auth.currentUser?.getIdToken(true)
+  const client = useMemo(
+    () =>
+      createUrqlClient({
+        getNewAuthToken,
+        cookies,
+      }),
+    [getNewAuthToken, cookies]
+  )
 
   return (
     <React.StrictMode>

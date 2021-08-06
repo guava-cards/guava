@@ -8,11 +8,9 @@ import { LoginProviders } from '../components/login-providers'
 import { useAuth, useIsAuthenticated } from '../context'
 
 export const Login = () => {
-  const { setCsrfToken, setViewer } = useAuth()
+  const { setViewer } = useAuth()
   const isAuthenticated = useIsAuthenticated()
   const [step, setStep] = useState(LoginForm.Step.CHECK_LOGIN)
-
-  console.log(isAuthenticated)
 
   if (isAuthenticated) {
     return <Redirect to={paths.home} />
@@ -42,8 +40,7 @@ export const Login = () => {
       <LoginForm
         step={step}
         setStep={setStep}
-        onSuccess={(viewer, { csrf }) => {
-          setCsrfToken(csrf)
+        onSuccess={viewer => {
           setViewer(viewer)
         }}
       />

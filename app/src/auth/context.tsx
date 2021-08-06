@@ -1,31 +1,60 @@
 /* eslint-disable no-underscore-dangle */
-import React, { createContext, useContext, useState } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react'
 import { useCookies } from 'react-cookie'
 import { MeFragment, useViewerQuery, AuthenticationError } from '@guava/library'
+import { useAuth as useFirebaseAuth } from 'reactfire'
+import type firebase from 'firebase'
 
 export interface AuthContextValue {
-  csrfToken: string
+  idToken?: string
   viewer?: MeFragment
   setViewer: (viewer: MeFragment) => void
-  setCsrfToken: (token: string) => void
 }
 
 export const AuthContext = createContext({} as AuthContextValue)
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const [{ data }] = useViewerQuery({
+  const firebaseAuth = useFirebaseAuth()
+  const [{ data }, refetch] = useViewerQuery({
     requestPolicy: 'network-only',
   })
-  const [cookies, setCookie] = useCookies(['_authenticated', 'csrf_token'])
-  const csrfToken = cookies.csrf_token
+  const [{ idToken }, setCookie, removeCookie] = useCookies(['idToken'])
   const [viewer, setViewer] = useState(() => data?.viewer)
+
+  const setIdToken = useCallback(
+    async (user: firebase.User | null) => {
+      const newToken = await user?.getIdToken(true)
+      if (newToken) {
+        setCookie('idToken', newToken, { path: '/', sameSite: 'strict' })
+      } else {
+        removeCookie('idToken')
+      }
+
+      refetch()
+    },
+    [setCookie, refetch, removeCookie]
+  )
+
+  useEffect(
+    () => firebaseAuth.onIdTokenChanged(setIdToken),
+    [firebaseAuth, setIdToken]
+  )
+
+  useEffect(() => {
+    setViewer(data?.viewer)
+  }, [data])
 
   return (
     <AuthContext.Provider
       value={{
-        csrfToken,
+        idToken,
         viewer,
-        setCsrfToken: token => setCookie('csrf_token', token),
         setViewer,
       }}
     >
