@@ -14,6 +14,7 @@ gem 'redis', '~> 4.0'
 gem 'sidekiq'
 
 gem 'action_policy'
+gem 'firebase_id_token'
 gem 'jwt_sessions'
 gem 'rolify'
 gem 'sorcery'

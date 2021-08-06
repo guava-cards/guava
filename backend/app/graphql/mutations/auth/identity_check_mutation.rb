@@ -7,9 +7,9 @@ module Mutations
       class IdentityType < Types::BaseEnum
         graphql_name 'IdentityType'
         description "A user's identity type"
+
         value 'EMAIL', "The user's email address"
         value 'USERNAME', "The user's username"
-        value 'LOGIN', "The user's username or email address"
       end
 
       argument :identity, String, 'The value of the identity', required: true
@@ -22,8 +22,6 @@ module Mutations
                    User.find_by(email: identity.downcase).present?
                  when 'USERNAME'
                    User.find_by(username: identity.downcase).present?
-                 when 'LOGIN'
-                   User.find_for_authentication(identity).present?
                  end
 
         { exists: exists }

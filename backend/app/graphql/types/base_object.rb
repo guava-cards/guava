@@ -11,7 +11,7 @@ module Types
     field_class Types::BaseField
     field_class.prepend(ActionPolicy::GraphQL::AuthorizedField)
 
-    authorize :user, through: :authorized_viewer
+    authorize :user, through: :current_user
 
     include ActionPolicy::GraphQL::Fields
 

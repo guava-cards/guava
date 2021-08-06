@@ -1,37 +1,15 @@
 module Common
   module Methods
-    include JWTSessions::RailsAuthorization
-
     delegate :controller, to: :context
     delegate :request, to: :controller
     delegate :response, to: :controller
     delegate :logger, to: :controller
+    delegate :current_user, to: :controller
+    delegate :raw_token, to: :controller
+    delegate :authentication_manager, to: :controller
 
-    def viewer
-      @viewer ||= User.find payload['user_id'] if payload.present?
-    rescue JWTSessions::Errors::Error
-      nil
+    def authenticate!
+      raise Errors::Unauthenticated if current_user.blank?
     end
-
-    def authorized_viewer
-      authorize_request!
-      viewer
-    rescue JWTSessions::Errors::Error
-      nil
-    end
-
-    def authorize_request!
-      authorize_access_request!
-    end
-
-    # rubocop:disable Lint/UselessMethodDefinition
-    def authorize_access_request!
-      super
-    end
-
-    def authorize_refresh_request!
-      super
-    end
-    # rubcop:enable Lint/UselessMethodDefinition
   end
 end

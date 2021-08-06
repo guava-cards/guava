@@ -11,8 +11,6 @@ class GraphqlController < ApplicationController
     context = {
       controller: self,
       current_user: current_user
-      # Query context goes here, for example:
-      # current_user: current_user,
     }
     result = GuavaSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result

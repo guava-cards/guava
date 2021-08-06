@@ -3,12 +3,8 @@ module Common
     module ClassMethods
       attr_reader :authenticated
 
-      def authenticate(enabled = true, **options)
-        @authenticated = if enabled
-                           options.fetch(:for, :access).to_sym
-                         else
-                           false
-                         end
+      def authenticate(enabled = true)
+        @authenticated = enabled
       end
     end
 
@@ -22,8 +18,8 @@ module Common
 
     def ready?(**_args)
       authenticate = self.class.authenticated
-      logger.debug "#{self.class.name}: Authenticate #{authenticate}"
-      public_send "authorize_#{authenticate.to_s.gsub(/_request/, '')}_request!".to_sym if authenticate.present?
+      logger.debug "#{self.class.name}: Authenticated Request"
+      public_send :authenticate! if authenticate
 
       logger.debug "#{self.class.name}: Ready"
       true
