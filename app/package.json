@@ -8,6 +8,7 @@
     "server": "ts-node server"
   },
   "dependencies": {
+    "@apollo/client": "^3.4.5",
     "@chakra-ui/react": "^1.6.5",
     "@emotion/cache": "^11.4.0",
     "@emotion/react": "^11.4.0",
@@ -22,6 +23,7 @@
     "formik": "^2.2.9",
     "formik-chakra-ui": "^1.4.7",
     "framer-motion": "^4.1.17",
+    "js-base64": "^3.6.1",
     "react": "^17.0.0",
     "react-async-ssr": "^0.7.2",
     "react-cookie": "^4.0.3",
@@ -34,7 +36,6 @@
     "reactfire": "^3.0.0-rc.3",
     "superjson": "^1.7.5",
     "universal-cookie": "^4.0.4",
-    "urql": "^2.0.4",
     "vite-plugin-ssr": "^0.2.3",
     "yup": "^0.32.9"
   },

@@ -1,11 +1,8 @@
 import { ChakraProvider, ColorMode } from '@chakra-ui/react'
 import { Cookies, CookiesProvider } from 'react-cookie'
-import React, { useMemo } from 'react'
-import { Provider as UrqlProvider } from 'urql'
-import { createUrqlClient } from '@guava/library'
+import React from 'react'
 import { useLocation } from 'react-router-dom'
 import { ErrorBoundary } from 'react-error-boundary'
-import { useAuth } from 'reactfire'
 import { AuthProvider } from '../auth/context'
 import { theme } from './theme'
 import { DynamicColorMode } from './theme/DynamicColorMode'
@@ -23,17 +20,6 @@ interface AppProps {
 
 export const App: React.FC<AppProps> = ({ cookies, children }) => {
   const { pathname } = useLocation()
-  const auth = useAuth()
-
-  const getNewAuthToken = async () => auth.currentUser?.getIdToken(true)
-  const client = useMemo(
-    () =>
-      createUrqlClient({
-        getNewAuthToken,
-        cookies,
-      }),
-    [getNewAuthToken, cookies]
-  )
 
   return (
     <React.StrictMode>
@@ -45,14 +31,12 @@ export const App: React.FC<AppProps> = ({ cookies, children }) => {
         <CookiesProvider cookies={new Cookies(cookies)}>
           <ChakraProvider theme={theme}>
             <DynamicColorMode>
-              <UrqlProvider value={client}>
-                <Suspense fallback={<AppFallback />}>
-                  <AuthProvider>
-                    <Head />
-                    <Routes>{children}</Routes>
-                  </AuthProvider>
-                </Suspense>
-              </UrqlProvider>
+              <Suspense fallback={<AppFallback />}>
+                <AuthProvider>
+                  <Head />
+                  <Routes>{children}</Routes>
+                </AuthProvider>
+              </Suspense>
             </DynamicColorMode>
             <GlobalStyles />
           </ChakraProvider>

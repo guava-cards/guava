@@ -1,4 +1,4 @@
 export * from './helpers'
-export * from './services'
+export * from './apollo'
 export * from './env'
 export * from './errors'

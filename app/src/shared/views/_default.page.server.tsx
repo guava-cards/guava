@@ -4,8 +4,8 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { renderToStringAsync } from 'react-async-ssr'
 import { html } from 'vite-plugin-ssr'
 import {
-  urqlSsr,
   AuthenticationError,
+  createApolloClient,
   DomainError,
   NotFoundError,
 } from '@guava/library'
@@ -15,6 +15,8 @@ import superjson from 'superjson'
 import { Helmet } from 'react-helmet'
 import Cookies from 'universal-cookie'
 import { ColorModeScript } from '@chakra-ui/react'
+import { getDataFromTree } from '@apollo/client/react/ssr'
+import { ApolloProvider } from '@apollo/client'
 import { PageContext } from '../typings/ssr'
 import { errorRedirects } from '../utils/error-redirects'
 import { AppProviders } from '../app-providers'
@@ -43,19 +45,25 @@ async function render(pageContext: PageContext) {
   pageProps.error = error ? superjson.stringify(error) : null
   pageProps.cookies = headers.cookie
 
+  const cookies = new Cookies(headers.cookie)
+  const client = createApolloClient({
+    getAuthToken: () => Promise.resolve(cookies.get('idToken')),
+  })
+
   const element = (
     <AppProviders url={url} cache={cache}>
-      <Page {...pageProps} />
+      <ApolloProvider client={client}>
+        <Page {...pageProps} />
+      </ApolloProvider>
     </AppProviders>
   )
 
   await ssrPrepass(element)
-
-  const data = JSON.stringify(urqlSsr.extractData())
   await renderToStringAsync(element)
+  await getDataFromTree(element)
 
   const helmet = Helmet.renderStatic()
-  const cookies = new Cookies(headers.cookie)
+  const initialState = JSON.stringify(client.extract())
 
   const colorMode = cookies.get('chakra-ui-color-mode') ?? 'light'
   const colorModeScriptHtml = renderToStaticMarkup(
@@ -82,8 +90,21 @@ async function render(pageContext: PageContext) {
       <body class="chakra-ui-${colorMode}" ${helmet.bodyAttributes.toString()}>
         ${html.dangerouslySkipEscape(colorModeScriptHtml)}
         <div id="root"></div>
+        <<<<<<< HEAD
         <script>
-          window.__URQL_DATA__ = ${html.dangerouslySkipEscape(data)}
+                    window.__URQL_DATA__ = ${html.dangerouslySkipEscape(data)}
+          =======
+                  <script nonce="${createNonce()}">
+                    window.__APOLLO_STATE__ = ${html.dangerouslySkipEscape(
+            initialState
+          )}
+                    window.__APP_DATA__ = {
+                      csrf: ${cookies.get('csrf_token')
+            ? html.dangerouslySkipEscape(`"${cookies.get('csrf_token')}"`)
+            : 'undefined'},
+                      colorMode: '${cookies.get('chakra-ui-color-mode')}',
+                    }
+          >>>>>>> refactor/apollo-client
         </script>
       </body>
     </html>

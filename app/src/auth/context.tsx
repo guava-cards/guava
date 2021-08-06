@@ -7,13 +7,15 @@ import React, {
   useCallback,
 } from 'react'
 import { useCookies } from 'react-cookie'
-import { MeFragment, useViewerQuery, AuthenticationError } from '@guava/library'
 import { useAuth as useFirebaseAuth } from 'reactfire'
 import type firebase from 'firebase'
+import { MeFragment, useViewerQuery, AuthenticationError } from '@guava/library'
+import { AppFallback } from '~/shared/app-fallback'
 
 export interface AuthContextValue {
   idToken?: string
   viewer?: MeFragment
+  initializing?: boolean
   setViewer: (viewer: MeFragment) => void
 }
 
@@ -21,10 +23,11 @@ export const AuthContext = createContext({} as AuthContextValue)
 
 export const AuthProvider: React.FC = ({ children }) => {
   const firebaseAuth = useFirebaseAuth()
-  const [{ data }, refetch] = useViewerQuery({
-    requestPolicy: 'network-only',
-  })
   const [{ idToken }, setCookie, removeCookie] = useCookies(['idToken'])
+  const { data, loading, refetch } = useViewerQuery({
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-and-network',
+  })
   const [viewer, setViewer] = useState(() => data?.viewer)
 
   const setIdToken = useCallback(
@@ -56,9 +59,10 @@ export const AuthProvider: React.FC = ({ children }) => {
         idToken,
         viewer,
         setViewer,
+        initializing: loading,
       }}
     >
-      {children}
+      {loading ? <AppFallback /> : children}
     </AuthContext.Provider>
   )
 }
@@ -68,8 +72,8 @@ export function useAuth() {
 }
 
 export function useIsAuthenticated() {
-  const { viewer } = useAuth()
-  return !!viewer
+  const { viewer, initializing } = useAuth()
+  return !!viewer && !initializing
 }
 
 interface UseAuthenticatedViewerConfig {
@@ -80,7 +84,8 @@ export function useAuthenticatedViewer({
   unauthenticatedRedirectTo,
 }: UseAuthenticatedViewerConfig = {}) {
   const { viewer } = useAuth()
-  if (!viewer) {
+  const isAuthenticated = useIsAuthenticated()
+  if (!isAuthenticated || !viewer) {
     throw new AuthenticationError(undefined, unauthenticatedRedirectTo)
   }
 

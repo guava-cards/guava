@@ -19,7 +19,6 @@ import { Form, FormSubmit } from '~/shared/components/form'
 
 interface LoginFormProps extends BoxProps {
   onSuccess?: (user: MeFragment) => void
-  onFailure?: (failureReason?: string) => void
   step: LoginFormSteps
   setStep: (step: LoginFormSteps) => void
 }
@@ -32,14 +31,13 @@ export enum LoginFormSteps {
 
 export const LoginForm = ({
   onSuccess,
-  onFailure,
   step,
   setStep,
   ...props
 }: LoginFormProps) => {
   const auth = useFirebaseAuth()
-  const [, upsertUser] = useUpsertUserMutation()
-  const [, checkIfUserExists] = useIdentityCheckMutation()
+  const [upsertUser] = useUpsertUserMutation()
+  const [checkIfUserExists] = useIdentityCheckMutation()
 
   const schema = useMemo(() => {
     switch (step) {
@@ -61,8 +59,10 @@ export const LoginForm = ({
     try {
       if (step === LoginFormSteps.CHECK_LOGIN) {
         const { data } = await checkIfUserExists({
-          identity: email,
-          identityType: IdentityType.Email,
+          variables: {
+            identity: email,
+            identityType: IdentityType.Email,
+          },
         })
         const userExists = data?.identityCheck?.exists === true
         const newStep = userExists
@@ -74,13 +74,13 @@ export const LoginForm = ({
 
       if (step === LoginFormSteps.SIGN_IN) {
         await auth.signInWithEmailAndPassword(email, password as string)
-        const { data, error } = await upsertUser()
+        const { data, errors } = await upsertUser()
 
         const viewer = data?.upsertUser?.user
         if (viewer) return onSuccess?.(viewer)
 
         return {
-          _formError: data?.upsertUser?.failureReason ?? error,
+          _formError: data?.upsertUser?.failureReason ?? errors?.[0],
           _failure: true,
           _validationErrors: data?.upsertUser?.validationErrors?.messages,
         }
