@@ -12,12 +12,6 @@ export const Login = () => {
   const isAuthenticated = useIsAuthenticated()
   const [step, setStep] = useState(LoginForm.Step.CHECK_LOGIN)
 
-  console.log(isAuthenticated)
-
-  if (isAuthenticated) {
-    return <Redirect to={paths.home} />
-  }
-
   return (
     <Box
       maxW="sm"

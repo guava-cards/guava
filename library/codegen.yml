@@ -17,16 +17,17 @@ generates:
           content: '/* eslint-disable */'
       - 'typescript'
       - 'typescript-operations'
-      - 'typescript-urql'
+      - 'typescript-react-apollo'
 
-  src/generated/introspection.ts:
-    config:
-      useTypeImports: true
+  src/generated/introspection-result.ts:
+    plugins:
+      - fragment-matcher
 
+  src/generated/apollo-helpers.ts:
     plugins:
       - add:
           content: '/* eslint-disable */'
-      - 'urql-introspection'
+      - typescript-apollo-client-helpers
 
   ./graphql.schema.json:
     plugins:

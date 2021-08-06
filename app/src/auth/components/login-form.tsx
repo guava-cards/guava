@@ -37,8 +37,8 @@ export const LoginForm = ({
   setStep,
   ...props
 }: LoginFormProps) => {
-  const [, checkIfUserExists] = useIdentityCheckMutation()
-  const [, loginUser] = useLoginUserMutation()
+  const [checkIfUserExists] = useIdentityCheckMutation()
+  const [loginUser] = useLoginUserMutation()
 
   const schema = useMemo(() => {
     switch (step) {
@@ -60,8 +60,7 @@ export const LoginForm = ({
     try {
       if (step === LoginFormSteps.CHECK_LOGIN) {
         const { data } = await checkIfUserExists({
-          identity: login,
-          identityType: IdentityType.Email,
+          variables: { identity: login, identityType: IdentityType.Email },
         })
         const userExists = data?.identityCheck?.exists === true
         const newStep = userExists
@@ -72,16 +71,15 @@ export const LoginForm = ({
       }
 
       if (step === LoginFormSteps.SIGN_IN) {
-        const { data, error } = await loginUser({
-          login,
-          password: password as string,
+        const { data, errors } = await loginUser({
+          variables: { login, password: password as string },
         })
         const user = data?.loginUser?.user
         const authToken = data?.loginUser?.authToken
         if (user && authToken) return onSuccess?.(user, authToken)
 
         return {
-          _formError: data?.loginUser?.failureReason ?? error,
+          _formError: data?.loginUser?.failureReason ?? errors?.[0]?.message,
           _failure: true,
         }
       }

@@ -33,12 +33,6 @@ module Authentication
                         secure: !Rails.env.development?,
                         same_site: 'Strict',
                         expires: auth_token[:refresh_expires_at]
-
-    response.set_cookie :csrf_token,
-                        value: auth_token[:csrf],
-                        httponly: false,
-                        secure: !Rails.env.development?,
-                        same_site: 'Strict'
   end
   # rubocop:enable Metrics/MethodLength
 end

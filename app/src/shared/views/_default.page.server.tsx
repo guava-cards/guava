@@ -6,8 +6,8 @@ import { StaticRouter } from 'react-router-dom'
 import { renderToStringAsync } from 'react-async-ssr'
 import { html } from 'vite-plugin-ssr'
 import {
-  urqlSsr,
   AuthenticationError,
+  createApolloClient,
   DomainError,
   NotFoundError,
 } from '@guava/library'
@@ -18,6 +18,8 @@ import superjson from 'superjson'
 import { Helmet } from 'react-helmet'
 import Cookies from 'universal-cookie'
 import { ColorModeScript } from '@chakra-ui/react'
+import { getDataFromTree } from '@apollo/client/react/ssr'
+import { ApolloProvider } from '@apollo/client'
 import { PageContext } from '../typings/ssr'
 import { errorRedirects } from '../utils/error-redirects'
 
@@ -42,24 +44,29 @@ async function render(pageContext: PageContext) {
     return { redirectTo: redirect }
   }
 
+  console.log('SSR cookies', headers.cookie)
+
   pageProps.error = error ? superjson.stringify(error) : null
   pageProps.cookies = headers.cookie
 
+  const client = createApolloClient(headers.cookie)
   const element = (
-    <CacheProvider value={cache}>
-      <StaticRouter location={url}>
-        <Page {...pageProps} />
-      </StaticRouter>
-    </CacheProvider>
+    <ApolloProvider client={client}>
+      <CacheProvider value={cache}>
+        <StaticRouter location={url}>
+          <Page {...pageProps} />
+        </StaticRouter>
+      </CacheProvider>
+    </ApolloProvider>
   )
 
   await ssrPrepass(element)
-
-  const data = JSON.stringify(urqlSsr.extractData())
   await renderToStringAsync(element)
+  await getDataFromTree(element)
 
   const helmet = Helmet.renderStatic()
   const cookies = new Cookies(headers.cookie)
+  const initialState = JSON.stringify(client.extract())
 
   const createNonce = () => crypto.randomBytes(16).toString('base64')
 
@@ -92,7 +99,7 @@ async function render(pageContext: PageContext) {
         ${html.dangerouslySkipEscape(colorModeScriptHtml)}
         <div id="root"></div>
         <script nonce="${createNonce()}">
-          window.__URQL_DATA__ = ${html.dangerouslySkipEscape(data)}
+          window.__APOLLO_STATE__ = ${html.dangerouslySkipEscape(initialState)}
           window.__APP_DATA__ = {
             csrf: ${cookies.get('csrf_token')
               ? html.dangerouslySkipEscape(`"${cookies.get('csrf_token')}"`)
