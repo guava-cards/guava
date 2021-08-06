@@ -53,16 +53,18 @@ export const AuthProvider: React.FC = ({ children }) => {
     setViewer(data?.viewer)
   }, [data])
 
+  const initializing = loading && !viewer
+
   return (
     <AuthContext.Provider
       value={{
         idToken,
         viewer,
         setViewer,
-        initializing: loading,
+        initializing,
       }}
     >
-      {loading ? <AppFallback /> : children}
+      {initializing ? <AppFallback /> : children}
     </AuthContext.Provider>
   )
 }

@@ -57,6 +57,7 @@ module.exports = {
     'prettier/prettier': 'warn',
     'react/require-default-props': 'off', // just define default props in function
     'import/extensions': 'off',
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
   },
   settings: {
     'import/resolver': {

@@ -90,21 +90,8 @@ async function render(pageContext: PageContext) {
       <body class="chakra-ui-${colorMode}" ${helmet.bodyAttributes.toString()}>
         ${html.dangerouslySkipEscape(colorModeScriptHtml)}
         <div id="root"></div>
-        <<<<<<< HEAD
         <script>
-                    window.__URQL_DATA__ = ${html.dangerouslySkipEscape(data)}
-          =======
-                  <script nonce="${createNonce()}">
-                    window.__APOLLO_STATE__ = ${html.dangerouslySkipEscape(
-            initialState
-          )}
-                    window.__APP_DATA__ = {
-                      csrf: ${cookies.get('csrf_token')
-            ? html.dangerouslySkipEscape(`"${cookies.get('csrf_token')}"`)
-            : 'undefined'},
-                      colorMode: '${cookies.get('chakra-ui-color-mode')}',
-                    }
-          >>>>>>> refactor/apollo-client
+          window.__APOLLO_STATE__ = ${html.dangerouslySkipEscape(initialState)}
         </script>
       </body>
     </html>
