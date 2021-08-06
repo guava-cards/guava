@@ -58,6 +58,7 @@ module.exports = {
     'react/require-default-props': 'off', // just define default props in function
     'import/extensions': 'off',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
   },
   settings: {
     'import/resolver': {

@@ -25,7 +25,7 @@ const theme = extendTheme({
     Alert,
   },
   config: {
-    initialColorMode: 'light',
+    initialColorMode: 'dark',
     cssVarPrefix: 'gc',
   },
 })

@@ -17,9 +17,11 @@ import Cookies from 'universal-cookie'
 import { ColorModeScript } from '@chakra-ui/react'
 import { getDataFromTree } from '@apollo/client/react/ssr'
 import { ApolloProvider } from '@apollo/client'
+import createEmotionServer from '@emotion/server/create-instance'
 import { PageContext } from '../typings/ssr'
 import { errorRedirects } from '../utils/error-redirects'
 import { AppProviders } from '../app-providers'
+import { theme } from '../theme'
 
 export { render }
 export { passToClient }
@@ -36,6 +38,7 @@ async function render(pageContext: PageContext) {
 
   const key = 'gc'
   const cache = createCache({ key })
+  const emotion = createEmotionServer(cache)
 
   const redirect = error && errorRedirects(error)
   if (redirect) {
@@ -59,7 +62,7 @@ async function render(pageContext: PageContext) {
   )
 
   await ssrPrepass(element)
-  await renderToStringAsync(element)
+  const contentHtml = await renderToStringAsync(element)
   await getDataFromTree(element)
 
   const helmet = Helmet.renderStatic()
@@ -69,11 +72,13 @@ async function render(pageContext: PageContext) {
   const colorModeScriptHtml = renderToStaticMarkup(
     <ColorModeScript initialColorMode={cookies.get('chakra-ui-color-mode')} />
   )
+  const chunks = emotion.extractCriticalToChunks(contentHtml)
 
   return html`
     <!DOCTYPE html>
     <html
       ${helmet.htmlAttributes.toString()}
+      data-color-mode="${colorMode}"
       style="--chakra-ui-color-mode: ${colorMode}"
       lang="en"
     >
@@ -85,7 +90,14 @@ async function render(pageContext: PageContext) {
           ${helmet.title.toString()}
           ${helmet.meta.toString()}
           ${helmet.link.toString()}
-        `)}
+        `)} ${html.dangerouslySkipEscape(
+          emotion.constructStyleTagsFromChunks(chunks)
+        )}
+        <style>
+          html[data-color-mode='dark'] {
+            background-color: ${theme.colors.modes.dark.background[500]};
+          }
+        </style>
       </head>
       <body class="chakra-ui-${colorMode}" ${helmet.bodyAttributes.toString()}>
         ${html.dangerouslySkipEscape(colorModeScriptHtml)}

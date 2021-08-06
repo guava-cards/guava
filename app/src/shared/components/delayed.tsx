@@ -11,7 +11,7 @@ export interface DelayedProps {
 export const Delayed: React.FC<DelayedProps> = ({
   children,
   Component,
-  delayMs = 0,
+  delayMs = 300,
 }) => {
   const [show, setShow] = useState(false)
 

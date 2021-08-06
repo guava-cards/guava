@@ -1,8 +1,13 @@
-import { ChakraProvider, ColorMode } from '@chakra-ui/react'
+import {
+  ChakraProvider,
+  ColorMode,
+  cookieStorageManager,
+} from '@chakra-ui/react'
 import { Cookies, CookiesProvider } from 'react-cookie'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { ErrorBoundary } from 'react-error-boundary'
+import { isServerSide, persistor } from '@guava/library'
 import { AuthProvider } from '../auth/context'
 import { theme } from './theme'
 import { DynamicColorMode } from './theme/DynamicColorMode'
@@ -20,6 +25,23 @@ interface AppProps {
 
 export const App: React.FC<AppProps> = ({ cookies, children }) => {
   const { pathname } = useLocation()
+  const [restoringCache, setRestoringCache] = useState(!isServerSide())
+  const restoreCache = async () => {
+    setRestoringCache(true)
+
+    try {
+      await persistor.restore()
+      console.log('[persistor] cache restored')
+    } catch (error) {
+      console.log('[persistor] failed to restore cache')
+    } finally {
+      setRestoringCache(false)
+    }
+  }
+
+  useEffect(() => {
+    if (!isServerSide()) restoreCache()
+  }, [])
 
   return (
     <React.StrictMode>
@@ -29,14 +51,21 @@ export const App: React.FC<AppProps> = ({ cookies, children }) => {
         resetKeys={[pathname]}
       >
         <CookiesProvider cookies={new Cookies(cookies)}>
-          <ChakraProvider theme={theme}>
+          <ChakraProvider
+            theme={theme}
+            colorModeManager={cookieStorageManager(cookies)}
+          >
             <DynamicColorMode>
-              <Suspense fallback={<AppFallback />}>
-                <AuthProvider>
-                  <Head />
-                  <Routes>{children}</Routes>
-                </AuthProvider>
-              </Suspense>
+              {restoringCache ? (
+                <AppFallback />
+              ) : (
+                <Suspense fallback={<AppFallback />}>
+                  <AuthProvider>
+                    <Head />
+                    <Routes>{children}</Routes>
+                  </AuthProvider>
+                </Suspense>
+              )}
             </DynamicColorMode>
             <GlobalStyles />
           </ChakraProvider>
