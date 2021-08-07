@@ -9,7 +9,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --project ./tsconfig.json --noEmit",
     "format": "yarn lint --fix && prettier . --write"
   },
   "dependencies": {
