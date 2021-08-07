@@ -5,6 +5,7 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
+    jest: true,
   },
   extends: [
     'plugin:@typescript-eslint/eslint-recommended',
@@ -29,9 +30,12 @@ module.exports = {
           '**/*.test.ts',
           '**/*.spec.ts',
           '**/test-utils/**',
+          '**/tests/**',
+          '**/spec/**',
           '**/__test__/**',
           '**/__tests__/**',
-          'jest.setup.ts',
+          'jest.setup.js',
+          'jest.config.js',
           '*.config.ts',
         ],
       },

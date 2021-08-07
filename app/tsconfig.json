@@ -14,6 +14,6 @@
       "esModuleInterop": true
     }
   },
-  "include": ["./src", "vite.config.ts", "./server"],
+  "include": ["./src", "vite.config.ts", "./server", "jest.config.js"],
   "exclude": ["**/node_modules/**"]
 }
