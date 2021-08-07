@@ -3,7 +3,9 @@
 
 const fetchMock = require('jest-fetch-mock')
 const { toHaveNoViolations } = require('jest-axe')
+const { createSerializer } = require('@emotion/jest')
 
+expect.addSnapshotSerializer(createSerializer())
 expect.extend(toHaveNoViolations)
 fetchMock.enableMocks()
 

@@ -3,7 +3,75 @@
 exports[`Shared > Components > <DarkModeButton /> should match the snapshot 1`] = `
 Object {
   "asFragment": [Function],
-  "baseElement": <body
+  "baseElement": .emotion-0 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: 0.25rem;
+  font-weight: var(--gc-fontWeights-semibold);
+  transition-property: var(--gc-transition-property-common);
+  transition-duration: var(--gc-transition-duration-normal);
+  box-shadow: var(--gc-shadows-sm);
+  border-width: 1px;
+  border-color: var(--gc-colors-mode-secondary-200);
+  height: var(--gc-sizes-8);
+  min-width: var(--gc-sizes-8);
+  font-size: var(--gc-fontSizes-sm);
+  -webkit-padding-start: 0px;
+  padding-inline-start: 0px;
+  -webkit-padding-end: 0px;
+  padding-inline-end: 0px;
+  padding: 0px;
+  border: var(--gc-borders-none);
+}
+
+.emotion-0:focus,
+.emotion-0[data-focus] {
+  box-shadow: var(--gc-shadows-outline);
+}
+
+.emotion-0[disabled],
+.emotion-0[aria-disabled=true],
+.emotion-0[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--gc-shadows-none);
+}
+
+.emotion-0:hover[disabled],
+.emotion-0[data-hover][disabled],
+.emotion-0:hover[aria-disabled=true],
+.emotion-0[data-hover][aria-disabled=true],
+.emotion-0:hover[data-disabled],
+.emotion-0[data-hover][data-disabled] {
+  background: initial;
+}
+
+<body
     class="chakra-ui-light"
   >
     <div
@@ -37,7 +105,7 @@ Object {
     <div>
       <button
         aria-label="Toggle dark mode"
-        class="chakra-button gc-11tokyg"
+        class="chakra-button emotion-0"
         type="button"
       >
         <svg
@@ -60,10 +128,78 @@ Object {
       </button>
     </div>
   </body>,
-  "container": <div>
+  "container": .emotion-0 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: auto;
+  line-height: 1.2;
+  border-radius: 0.25rem;
+  font-weight: var(--gc-fontWeights-semibold);
+  transition-property: var(--gc-transition-property-common);
+  transition-duration: var(--gc-transition-duration-normal);
+  box-shadow: var(--gc-shadows-sm);
+  border-width: 1px;
+  border-color: var(--gc-colors-mode-secondary-200);
+  height: var(--gc-sizes-8);
+  min-width: var(--gc-sizes-8);
+  font-size: var(--gc-fontSizes-sm);
+  -webkit-padding-start: 0px;
+  padding-inline-start: 0px;
+  -webkit-padding-end: 0px;
+  padding-inline-end: 0px;
+  padding: 0px;
+  border: var(--gc-borders-none);
+}
+
+.emotion-0:focus,
+.emotion-0[data-focus] {
+  box-shadow: var(--gc-shadows-outline);
+}
+
+.emotion-0[disabled],
+.emotion-0[aria-disabled=true],
+.emotion-0[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: var(--gc-shadows-none);
+}
+
+.emotion-0:hover[disabled],
+.emotion-0[data-hover][disabled],
+.emotion-0:hover[aria-disabled=true],
+.emotion-0[data-hover][aria-disabled=true],
+.emotion-0:hover[data-disabled],
+.emotion-0[data-hover][data-disabled] {
+  background: initial;
+}
+
+<div>
     <button
       aria-label="Toggle dark mode"
-      class="chakra-button gc-11tokyg"
+      class="chakra-button emotion-0"
       type="button"
     >
       <svg
