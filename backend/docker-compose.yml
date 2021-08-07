@@ -95,7 +95,8 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
+      target: base
       args:
         RUBY_VERSION: '2.7.0'
         BUNDLE_VERSION: '2.2.25'
