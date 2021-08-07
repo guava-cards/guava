@@ -2,7 +2,8 @@
   "name": "@guava/app",
   "version": "0.0.0",
   "scripts": {
-    "dev": "PORT=8000 yarn server",
+    "dev": "SSR_MODE=false vite dev --host --port 8000",
+    "dev:ssr": "PORT=8000 yarn server",
     "start": "ts-node --transpile-only ./server",
     "build": "yarn type-check && yarn build:csr && yarn build:ssr",
     "build:ssr": "vite build --ssr",

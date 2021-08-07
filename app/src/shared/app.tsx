@@ -7,7 +7,7 @@ import { Cookies, CookiesProvider } from 'react-cookie'
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { ErrorBoundary } from 'react-error-boundary'
-import { isServerSide, persistor } from '@guava/library'
+import { persistor } from '@guava/library'
 import { AuthProvider } from '../auth/context'
 import { theme } from './theme'
 import { DynamicColorMode } from './theme/DynamicColorMode'
@@ -17,6 +17,7 @@ import { Routes } from './app-routes'
 import { Suspense } from './components/suspense'
 import { Head } from './components/head'
 import { ErrorFallback } from './components/error-fallback'
+import { useIsServerSide } from './hooks/use-is-server'
 
 interface AppProps {
   cookies?: string
@@ -25,7 +26,8 @@ interface AppProps {
 
 export const App: React.FC<AppProps> = ({ cookies, children }) => {
   const { pathname } = useLocation()
-  const [restoringCache, setRestoringCache] = useState(!isServerSide())
+  const isServerSide = useIsServerSide()
+  const [restoringCache, setRestoringCache] = useState(!isServerSide)
   const restoreCache = async () => {
     setRestoringCache(true)
 
@@ -40,8 +42,9 @@ export const App: React.FC<AppProps> = ({ cookies, children }) => {
   }
 
   useEffect(() => {
-    if (!isServerSide()) restoreCache()
-  }, [])
+    if (isServerSide) return
+    restoreCache()
+  }, [isServerSide])
 
   return (
     <React.StrictMode>
