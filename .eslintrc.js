@@ -37,6 +37,7 @@ module.exports = {
           'jest.setup.js',
           'jest.config.js',
           '*.config.ts',
+          'vite.config.ts',
         ],
       },
     ],

@@ -14,6 +14,7 @@
   ],
   "scripts": {
     "codegen": "yarn workspace @guava/library codegen",
+    "start:app": "yarn workspace @guava/app start",
     "test": "jest",
     "test:frontend": "jest --projects applications/frontend",
     "test:backoffice": "jest --projects applications/backoffice",

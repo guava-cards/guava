@@ -38,6 +38,7 @@
     "test:watch": "jest --watch",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "type-check": "tsc --skipLibCheck --project ./tsconfig.json --noEmit",
-    "format": "yarn lint --fix && prettier . --write"
+    "format": "yarn lint --fix && prettier . --write",
+    "build": "npx tsc --project ./tsconfig.production.json --skipLibCheck"
   }
 }

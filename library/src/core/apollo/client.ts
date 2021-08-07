@@ -4,6 +4,7 @@ import {
   createHttpLink,
   NormalizedCacheObject,
 } from '@apollo/client'
+import { env } from '../env'
 
 import { isServerSide } from '../helpers'
 import { createAuthLink } from './auth'
@@ -25,7 +26,7 @@ export function createApolloClient({ getAuthToken }: CreateApolloClientConfig) {
       retry,
       createAuthLink(getAuthToken),
       createHttpLink({
-        uri: 'http://localhost:3000/graphql',
+        uri: env.GRAPHQL_API_URL,
       }),
     ]),
   })

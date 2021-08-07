@@ -17,5 +17,5 @@
     "jsx": "react",
     "noEmit": true
   },
-  "include": [".eslintrc.js", "jest.config.js", "jest.setup.js", "babel.config.js", "jest.config.base.js"]
+  "include": [".eslintrc.js", "jest.config.js", "jest.setup.js", "babel.config.js", "jest.config.base.js", "app", "library"]
 }

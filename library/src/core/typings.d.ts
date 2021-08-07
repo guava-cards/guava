@@ -5,5 +5,6 @@ interface ImportMeta {
     PROD: boolean
     BASE_URL: string
     MODE: string
+    GRAPHQL_API_URL: string
   }
 }
