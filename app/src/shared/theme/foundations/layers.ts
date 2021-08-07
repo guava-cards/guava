@@ -27,4 +27,33 @@ export const layerStyles = {
       },
     },
   },
+
+  lists: {
+    slash: {
+      listStyleType: 'none',
+      d: 'flex',
+      flexDir: 'row',
+      alignItems: 'center',
+      fontWeight: 'medium',
+      li: {
+        '&:after': {
+          content: '"/"',
+          mx: '0.5rem',
+        },
+        '&:last-child': {
+          '&:after': {
+            display: 'none',
+          },
+        },
+      },
+      a: {
+        transition: 'all ease-in-out 100ms',
+        '&:hover': {
+          textDecoration: 'underline',
+          opacity: 0.8,
+        },
+      },
+    },
+    bullet: {},
+  },
 }

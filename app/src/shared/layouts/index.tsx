@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import { ViewLayout } from '../typings/global'
 import { DashboardLayout } from './dashboard'
 
 export const LayoutComponentMap: Record<ViewLayout, React.ComponentType> = {
@@ -8,13 +9,17 @@ export const LayoutComponentMap: Record<ViewLayout, React.ComponentType> = {
 }
 
 const LayoutFor = (kind: ViewLayout) => LayoutComponentMap[kind]
-const wrapInLayout = (Component: React.ComponentType, kind: ViewLayout) => {
+export function wrapInLayout<Props = unknown>(
+  Component: React.ComponentType,
+  kind: ViewLayout,
+  props?: Props
+) {
   const LayoutComponent = LayoutFor(kind)
   return (
-    <LayoutComponent>
+    <LayoutComponent {...(props as never)}>
       <Component />
     </LayoutComponent>
   )
 }
 
-export { LayoutFor, DashboardLayout, wrapInLayout }
+export { LayoutFor, DashboardLayout }

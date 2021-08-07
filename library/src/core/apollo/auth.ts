@@ -5,6 +5,7 @@ export const createAuthLink = (
 ) => {
   const authLink = setContext(async (_, { headers }) => {
     const idToken = await getAuthToken()
+    console.log(idToken)
     return {
       headers: {
         ...headers,

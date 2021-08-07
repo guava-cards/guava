@@ -37,7 +37,8 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   const setIdToken = useCallback(
     async (user: firebase.User | null) => {
-      const newToken = await user?.getIdToken(true)
+      const newToken = await user?.getIdToken()
+      if (newToken === idToken) return
       if (newToken) {
         setCookie('idToken', newToken, { path: '/', sameSite: 'strict' })
         refetch()
@@ -47,7 +48,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         setViewer(undefined)
       }
     },
-    [setCookie, refetch, removeCookie]
+    [setCookie, refetch, removeCookie, idToken]
   )
 
   useEffect(

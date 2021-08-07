@@ -48,18 +48,18 @@ export const App: React.FC<AppProps> = ({ cookies, children }) => {
 
   return (
     <React.StrictMode>
-      <ErrorBoundary
-        FallbackComponent={ErrorFallback}
-        key={pathname}
-        resetKeys={[pathname]}
-      >
-        <Head />
-        <CookiesProvider cookies={new Cookies(cookies)}>
-          <ChakraProvider
-            theme={theme}
-            colorModeManager={cookieStorageManager(cookies)}
-          >
-            <DynamicColorMode>
+      <Head />
+      <CookiesProvider cookies={new Cookies(cookies)}>
+        <ChakraProvider
+          theme={theme}
+          colorModeManager={cookieStorageManager(cookies)}
+        >
+          <DynamicColorMode>
+            <ErrorBoundary
+              FallbackComponent={ErrorFallback}
+              key={pathname}
+              resetKeys={[pathname]}
+            >
               {restoringCache ? (
                 <AppFallback />
               ) : (
@@ -69,11 +69,11 @@ export const App: React.FC<AppProps> = ({ cookies, children }) => {
                   </AuthProvider>
                 </Suspense>
               )}
-            </DynamicColorMode>
-            <GlobalStyles />
-          </ChakraProvider>
-        </CookiesProvider>
-      </ErrorBoundary>
+            </ErrorBoundary>
+          </DynamicColorMode>
+          <GlobalStyles />
+        </ChakraProvider>
+      </CookiesProvider>
     </React.StrictMode>
   )
 }

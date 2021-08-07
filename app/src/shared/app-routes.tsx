@@ -5,15 +5,22 @@ import { wrapInLayout } from './layouts'
 import { HomePage } from './views'
 import { NotFound } from './views/not-found'
 import { routes as authRoutes } from '../auth/routes'
+import { routes as decksRoutes } from '../decks/routes'
 import { Suspense } from './components/suspense'
 import { ProtectedRoute } from './components/protected-route'
 
-export const routes = [...authRoutes].map(route => {
+export const routes = [...authRoutes, ...decksRoutes].map(route => {
   const FallbackComponent = route.Component ? route.Component : null
   const Component = route.importComponent
     ? lazy(route.importComponent)
     : FallbackComponent
   if (!Component) return null
+
+  const page = wrapInLayout(
+    Component,
+    route.layout ?? 'without-navigation',
+    route.layoutProps
+  )
 
   return (
     <Route
@@ -22,9 +29,7 @@ export const routes = [...authRoutes].map(route => {
       exact={route.exact}
       sensitive={route.sensitive}
     >
-      <Suspense fallback={<div>Loading.....</div>}>
-        <Component />
-      </Suspense>
+      <Suspense fallback={<div>Loading.....</div>}>{page}</Suspense>
     </Route>
   )
 })

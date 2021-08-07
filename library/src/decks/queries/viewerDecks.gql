@@ -4,12 +4,7 @@ query ViewerDecks($first: Int = 15, $after: String) {
       edges {
         cursor
         node {
-          id
-          visibilityMode
-          emoji
-          emojiAlt
-          description
-          createdAt
+          ...DeckRow_deck
         }
       }
 

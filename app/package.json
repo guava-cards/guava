@@ -1,9 +1,11 @@
 {
   "name": "@guava/app",
   "version": "0.0.0",
+  "private": true,
+  "license": "GNU Affero General Public License v3.0",
   "scripts": {
-    "dev": "SSR_MODE=false vite dev --host --port 8000",
-    "dev:ssr": "PORT=8000 yarn server",
+    "dev": "PORT=8000 yarn server",
+    "dev:csr": "SSR_MODE=false vite dev --host --port 8000",
     "start": "ts-node --transpile-only ./server",
     "build": "yarn type-check && yarn build:csr && yarn build:ssr",
     "build:ssr": "vite build --ssr",
@@ -27,6 +29,7 @@
     "@loadable/component": "^5.15.0",
     "@meronex/icons": "^4.0.0",
     "cross-fetch": "^3.1.4",
+    "dayjs": "^1.10.6",
     "express": "^4.17.1",
     "firebase": "^8.9.0",
     "formik": "^2.2.9",

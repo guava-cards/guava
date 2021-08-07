@@ -19,14 +19,15 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   withNavigation = true,
   withBreadcrumbs = false,
   children,
-  initialCrumbs = [],
+  initialCrumbs = [{ title: 'Home', href: '/', emoji: '🏡 ' }],
 }) => (
   <BreadcrumbsProvider crumbs={initialCrumbs}>
     <Box d="flex" h="full">
       <Head title="🏡 Home" />
+      {console.log(withBreadcrumbs)}
       {withSidebar && <DashboardSidebar />}
       <Suspense fallback={<DashboardLoading />}>
-        <Box ml={withSidebar ? SIDEBAR_WIDTH : 0} p={4}>
+        <Box w="full" ml={withSidebar ? SIDEBAR_WIDTH : 0} px={4} py={1}>
           {withNavigation && <DashboardHeader breadcrumbs={withBreadcrumbs} />}
           {children}
         </Box>

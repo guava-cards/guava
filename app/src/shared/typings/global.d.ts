@@ -1,3 +1,5 @@
+import { DashboardLayoutProps } from '../layouts/dashboard'
+
 declare type ViewLayout =
   | 'with-dashboard-sidebar'
   | 'without-navigation'
@@ -10,6 +12,7 @@ declare interface RouteConfig {
   strict?: string
   protected?: boolean
   Component?: React.ComponentType
-  layout?: React.ComponentType | ViewLayout
+  layout?: ViewLayout
+  layoutProps?: DashboardLayoutProps
   importComponent?: () => Promise<React.ComponentType>
 }

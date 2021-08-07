@@ -13,8 +13,17 @@ export type LinkProps = Omit<RouterLinkProps, 'end'> &
 
 const ChakraLink = chakra(RouterLink)
 
-const Link = ({ activeClassName = 'active', exact, ...props }: LinkProps) => (
-  <ChakraLink activeClassName={activeClassName} {...props} />
+const Link = ({
+  activeClassName = 'active',
+  exact = true,
+  ...props
+}: LinkProps) => (
+  <ChakraLink
+    activeClassName={activeClassName}
+    exact={exact}
+    active
+    {...props}
+  />
 )
 
 export { Link }
