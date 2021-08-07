@@ -9,7 +9,12 @@ import React, {
 import { useCookies } from 'react-cookie'
 import { useAuth as useFirebaseAuth } from 'reactfire'
 import type firebase from 'firebase'
-import { MeFragment, useViewerQuery, AuthenticationError } from '@guava/library'
+import {
+  MeFragment,
+  useViewerQuery,
+  AuthenticationError,
+  persistor,
+} from '@guava/library'
 import { AppFallback } from '~/shared/app-fallback'
 
 export interface AuthContextValue {
@@ -35,11 +40,12 @@ export const AuthProvider: React.FC = ({ children }) => {
       const newToken = await user?.getIdToken(true)
       if (newToken) {
         setCookie('idToken', newToken, { path: '/', sameSite: 'strict' })
+        refetch()
       } else {
+        persistor.purge()
         removeCookie('idToken')
+        setViewer(undefined)
       }
-
-      refetch()
     },
     [setCookie, refetch, removeCookie]
   )

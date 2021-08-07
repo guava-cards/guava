@@ -50,6 +50,7 @@ export const App: React.FC<AppProps> = ({ cookies, children }) => {
         key={pathname}
         resetKeys={[pathname]}
       >
+        <Head />
         <CookiesProvider cookies={new Cookies(cookies)}>
           <ChakraProvider
             theme={theme}
@@ -61,7 +62,6 @@ export const App: React.FC<AppProps> = ({ cookies, children }) => {
               ) : (
                 <Suspense fallback={<AppFallback />}>
                   <AuthProvider>
-                    <Head />
                     <Routes>{children}</Routes>
                   </AuthProvider>
                 </Suspense>
