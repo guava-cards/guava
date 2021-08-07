@@ -19,6 +19,11 @@ pre-push:
         - merge
         - rebase
 
+commit-msg:
+  scripts:
+    'commitlint.sh':
+      runner: bash
+
 pre-commit:
   parallel: true
   commands:
