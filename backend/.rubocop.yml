@@ -4,6 +4,8 @@ require:
 
 AllCops:
   NewCops: enable
+  Exclude:
+    - db/schema.rb
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
@@ -23,3 +25,7 @@ GraphQL/ExtractInputType:
 
 Metrics/MethodLength:
   Max: 15
+
+Metrics/BlockLength:
+  Exclude:
+    - db/**/*.rb

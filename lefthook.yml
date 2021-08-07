@@ -31,4 +31,4 @@ pre-commit:
       tags: backend style
       glob: '*.rb'
       exclude: 'application.rb|routes.rb'
-      run: rubocop --force-exclusion {all_files}
+      run: rubocop {staged_files}
