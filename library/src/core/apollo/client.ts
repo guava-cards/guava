@@ -26,7 +26,7 @@ export function createApolloClient({ getAuthToken }: CreateApolloClientConfig) {
       retry,
       createAuthLink(getAuthToken),
       createHttpLink({
-        uri: env.GRAPHQL_API_URL,
+        uri: env.GRAPHQL_API_URL as string,
       }),
     ]),
   })
