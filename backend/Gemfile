@@ -4,18 +4,20 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.7.0'
 
 gem 'bootsnap', '>= 1.4.4', require: false
-gem 'dotenv'
+gem 'dotenv-rails'
 gem 'image_processing', '~> 1.2'
 gem 'pg', '~> 1.1'
 gem 'puma', '~> 5.0'
 gem 'rack-cors'
 gem 'rails', '~> 6.1.4'
 gem 'redis', '~> 4.0'
+gem 'sidekiq'
 
 gem 'action_policy'
-gem 'devise'
+gem 'firebase_id_token'
 gem 'jwt_sessions'
 gem 'rolify'
+gem 'sorcery'
 
 gem 'activerecord-pg_enum'
 gem 'acts_as_list'
@@ -26,8 +28,11 @@ gem 'action_policy-graphql'
 gem 'graphql'
 gem 'graphql-batch'
 gem 'graphql_playground-rails', group: :development
+gem 'graphql-rails_logger'
+gem 'name_of_person'
 
 group :development, :test do
+  gem 'annotate'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'rspec-rails'

@@ -14,17 +14,17 @@ require 'sprockets/railtie'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+Dotenv::Railtie.load
 
-module Backend
+module Guava
   class Application < Rails::Application
     config.load_defaults 6.1
     config.api_only = true
-
-    config.middleware.use ActionDispatch::Cookies
-    config.middleware.use ActionDispatch::Session::CacheStore
-    config.middleware.use Rack::MethodOverride
-
     config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] }
-    config.session_store :cache_store
+
+    config.after_initialize do
+      Rails.application.load_tasks
+      Rake::Task['firebase:certificates:request'].invoke
+    end
   end
 end

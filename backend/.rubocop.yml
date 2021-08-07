@@ -2,6 +2,11 @@ require:
   - rubocop-rails
   - rubocop-graphql
 
+AllCops:
+  NewCops: enable
+  Exclude:
+    - db/schema.rb
+
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
@@ -14,3 +19,13 @@ Style/Documentation:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+GraphQL/ExtractInputType:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 15
+
+Metrics/BlockLength:
+  Exclude:
+    - db/**/*.rb

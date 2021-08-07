@@ -1,0 +1,38 @@
+overwrite: true
+schema: 'http://localhost:3000/graphql'
+documents:
+  - 'src/**/*.graphql'
+    # loader: codegen-documents-loader.js
+  - 'src/**/*.gql'
+    # loader: codegen-documents-loader.js
+generates:
+  src/generated/graphql.tsx:
+    config:
+      withHooks: true
+      withComponent: false
+      useTypeImports: true
+      dedupeFragments: true
+    plugins:
+      - add:
+          content: '/* eslint-disable */'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+
+  src/generated/introspection-result.ts:
+    plugins:
+      - fragment-matcher
+
+  src/generated/apollo-helpers.ts:
+    plugins:
+      - add:
+          content: '/* eslint-disable */'
+      - typescript-apollo-client-helpers
+
+  ./graphql.schema.json:
+    plugins:
+      - 'introspection'
+
+  ../graphql.schema.json:
+    plugins:
+      - 'introspection'
