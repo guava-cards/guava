@@ -26,6 +26,7 @@
     "format": "yarn workspaces run format"
   },
   "devDependencies": {
+    "@arkweid/lefthook": "^0.7.6",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.5",
     "@babel/preset-typescript": "^7.15.0",

@@ -6,6 +6,6 @@ import { isServerSide } from '~/../../library/src'
  * SSR does not support suspense
  */
 export const Suspense: React.FC<SuspenseProps> = ({ children, ...props }) => {
-  if (isServerSide()) return children
+  if (isServerSide()) return <>{children}</>
   return <ReactSuspense {...props}>{children}</ReactSuspense>
 }
