@@ -1,0 +1,19 @@
+# ignore backend for frontend docker build
+backend 
+
+# ignore artifacts
+**/node_modules
+**/.git
+**/.gitignore
+**/.env
+**/yarn-error.log
+**/dist
+
+# ignore files
+**/CONTRIBUTING.md
+**/README.md
+lefthook.yml
+LICENSE
+
+# app specific
+app/index.html

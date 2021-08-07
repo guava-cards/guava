@@ -1,19 +1,21 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": false,
-    "skipLibCheck": false,
-    "esModuleInterop": false,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
+    "baseUrl": "src",
+    "skipLibCheck": true,
+    "paths": {
+      "~/*": ["./*"]
+    }
   },
-  "include": ["./src"]
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "CommonJS",
+      "esModuleInterop": true,
+      "skipLibCheck": true
+    }
+  },
+  "include": ["./src", "vite.config.ts", "./server", "jest.config.js"],
+  "exclude": ["**/node_modules/**/*", "node_modules/**/*", "../node_modules/**/*"]
 }
