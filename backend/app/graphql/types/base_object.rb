@@ -16,6 +16,21 @@ module Types
     include ActionPolicy::GraphQL::Fields
 
     class << self
+      def authroize_allowed_to(rule)
+        @authorized_allowed_to = rule
+      end
+
+      def authorized?(object, context)
+        if @authorized_allowed_to
+          return super && allowed_to?(
+            @authorized_allowed_to,
+            object, context: { user: context[:current_user] }
+          )
+        end
+
+        super
+      end
+
       def authorize_object_field(*fields, rule: nil, policy: nil, raise_error: false)
         fields.each do |field|
           define_method field.to_sym do
