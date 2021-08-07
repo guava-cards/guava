@@ -1,0 +1,31 @@
+mutation UpdateDeck(
+  $deckId: ID!
+  $name: String
+  $description: String
+  $emoji: String
+  $emojiAlt: String
+  $visibilityMode: DeckVisbilityMode = PRIVATE
+) {
+  updateDeck(
+    input: {
+      deckId: $deckId
+      name: $name
+      emoji: $emoji
+      emojiAlt: $emojiAlt
+      description: $description
+      visibilityMode: $visibilityMode
+    }
+  ) {
+    deck {
+      id
+      visibilityMode
+    }
+
+    validationErrors {
+      details
+      messages
+    }
+
+    success
+  }
+}

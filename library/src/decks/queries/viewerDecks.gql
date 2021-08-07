@@ -1,0 +1,22 @@
+query ViewerDecks($first: Int = 15, $after: String) {
+  viewer {
+    decks(first: $first, after: $after) {
+      edges {
+        cursor
+        node {
+          id
+          visibilityMode
+          emoji
+          emojiAlt
+          description
+          createdAt
+        }
+      }
+
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}

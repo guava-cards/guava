@@ -1,0 +1,32 @@
+mutation CreateDeck(
+  $name: String!
+  $description: String
+  $emoji: String
+  $emojiAlt: String
+  $visibilityMode: DeckVisbilityMode = PRIVATE
+) {
+  createDeck(
+    input: {
+      name: $name
+      emoji: $emoji
+      emojiAlt: $emojiAlt
+      description: $description
+      visibilityMode: $visibilityMode
+    }
+  ) {
+    deckEdge {
+      cursor
+      node {
+        id
+        visibilityMode
+      }
+    }
+
+    validationErrors {
+      details
+      messages
+    }
+
+    success
+  }
+}
