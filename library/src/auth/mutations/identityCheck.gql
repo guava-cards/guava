@@ -1,8 +1,0 @@
-mutation IdentityCheck(
-  $identity: String!
-  $identityType: IdentityType = EMAIL
-) {
-  identityCheck(input: { identity: $identity, identityType: $identityType }) {
-    exists
-  }
-}

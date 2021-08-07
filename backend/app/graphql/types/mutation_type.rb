@@ -1,10 +1,10 @@
-# rubocop:disable GraphQL/FieldDescription
 module Types
   class MutationType < Types::BaseObject
-    description 'The root mutation type'
-
-    field :identity_check, mutation: Mutations::Auth::IdentityCheckMutation
-    field :upsert_user, mutation: Mutations::Users::UpsertUserMutation
+    # TODO: remove me
+    field :test_field, String, null: false,
+      description: "An example field added by the generator"
+    def test_field
+      "Hello World"
+    end
   end
 end
-# rubocop:enable GraphQL/FieldDescription
