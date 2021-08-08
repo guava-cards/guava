@@ -3,9 +3,9 @@
 This folder contains all the code for the web-facing part of the app.
 The bundled code can be found at [guava.cards](https://guava.cards)
 
-## Development
+## Development
 
-### Setting up locally
+### Setting up locally
 
 In order to get started locally, make sure you have Node/yarn installed on your machine.
 Next, run the following from the root directory:
@@ -20,7 +20,7 @@ $ cd ../app && yarn start
 You want to make sure you have the [backend](../backend/README.md) up and running before booting up the dev server.
 You also want to generate/re-generate the GraphQL artefacts in the `@guva/library` package
 
-### Editor Setp
+### Editor Setup
 
 Make sure your code editor/IDE has the following installed/functional:
 
