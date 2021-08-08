@@ -15,14 +15,20 @@ async function hydrate() {
     getAuthToken: async () => new Cookies().get('idToken'),
   })
 
-  ReactDOM.render(
+  const root = document.getElementById('root')
+  const element = (
     <AppProviders cache={cache}>
       <ApolloProvider client={client}>
         <Page {...pageContext.pageProps} />
       </ApolloProvider>
-    </AppProviders>,
-    document.getElementById('root')
+    </AppProviders>
   )
+
+  if (root?.childNodes.length) {
+    ReactDOM.hydrate(element, root)
+  } else {
+    ReactDOM.render(element, root)
+  }
 }
 
 hydrate()

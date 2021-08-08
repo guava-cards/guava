@@ -14,18 +14,15 @@ export const AllDecks = () => {
   })
 
   useEffect(() => {
-    if (!firstRender) return
     addCrumb('Decks', paths.decks.list, { emoji: '🗃' })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [firstRender])
+  }, [])
 
   const deckConnection = data?.viewer?.decks
-  console.log(deckConnection)
 
   return (
     <Box mx={-4}>
       <Heading px={4}>All Decks</Heading>
-      <DeckList mt={3} loading={loading} connection={data?.viewer?.decks} />
+      <DeckList mt={3} loading={loading} connection={deckConnection} />
     </Box>
   )
 }

@@ -1,18 +1,18 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-import { lazy } from '@loadable/component'
+import loadable from '@loadable/component'
 import { wrapInLayout } from './layouts'
 import { HomePage } from './views'
 import { NotFound } from './views/not-found'
 import { routes as authRoutes } from '../auth/routes'
 import { routes as decksRoutes } from '../decks/routes'
-import { Suspense } from './components/suspense'
 import { ProtectedRoute } from './components/protected-route'
+import { Suspense } from './components/suspense'
 
 export const routes = [...authRoutes, ...decksRoutes].map(route => {
   const FallbackComponent = route.Component ? route.Component : null
   const Component = route.importComponent
-    ? lazy(route.importComponent)
+    ? loadable(route.importComponent)
     : FallbackComponent
   if (!Component) return null
 
@@ -29,14 +29,13 @@ export const routes = [...authRoutes, ...decksRoutes].map(route => {
       exact={route.exact}
       sensitive={route.sensitive}
     >
-      <Suspense fallback={<div>Loading.....</div>}>{page}</Suspense>
+      {page}
     </Route>
   )
 })
 
-export const Routes: React.FC = ({ children }) => (
+export const Routes: React.FC = () => (
   <Switch>
-    {children}
     <ProtectedRoute
       exact
       path="/"

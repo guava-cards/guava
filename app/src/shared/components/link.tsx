@@ -18,12 +18,7 @@ const Link = ({
   exact = true,
   ...props
 }: LinkProps) => (
-  <ChakraLink
-    activeClassName={activeClassName}
-    exact={exact}
-    active
-    {...props}
-  />
+  <ChakraLink activeClassName={activeClassName} exact={exact} {...props} />
 )
 
 export { Link }

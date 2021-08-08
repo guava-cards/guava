@@ -1,6 +1,7 @@
 import 'cross-fetch/polyfill'
 import React from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
+import ssrPrepass from 'react-ssr-prepass'
+import { renderToStaticMarkup, renderToString } from 'react-dom/server'
 import { renderToStringAsync } from 'react-async-ssr'
 import { html } from 'vite-plugin-ssr'
 import {
@@ -9,13 +10,12 @@ import {
   DomainError,
   NotFoundError,
 } from '@guava/library'
-import ssrPrepass from 'react-ssr-prepass'
 import createCache from '@emotion/cache'
 import superjson from 'superjson'
 import { Helmet } from 'react-helmet'
 import Cookies from 'universal-cookie'
 import { ColorModeScript } from '@chakra-ui/react'
-import { getDataFromTree } from '@apollo/client/react/ssr'
+import { renderToStringWithData } from '@apollo/client/react/ssr'
 import { ApolloProvider } from '@apollo/client'
 import createEmotionServer from '@emotion/server/create-instance'
 import { PageContext } from '../typings/ssr'
@@ -33,12 +33,11 @@ superjson.registerClass(NotFoundError)
 superjson.registerClass(DomainError)
 superjson.registerClass(Error)
 
+const cache = createCache({ key: 'gc' })
+const emotion = createEmotionServer(cache)
+
 async function render(pageContext: PageContext) {
   const { Page, pageProps = {}, url, headers, _err: error } = pageContext
-
-  const key = 'gc'
-  const cache = createCache({ key })
-  const emotion = createEmotionServer(cache)
 
   const redirect = error && errorRedirects(error)
   if (redirect) {
@@ -53,17 +52,13 @@ async function render(pageContext: PageContext) {
     getAuthToken: () => Promise.resolve(cookies.get('idToken')),
   })
 
-  const element = (
+  const page = await renderToStringWithData(
     <AppProviders url={url} cache={cache}>
       <ApolloProvider client={client}>
         <Page {...pageProps} />
       </ApolloProvider>
     </AppProviders>
   )
-
-  await ssrPrepass(element)
-  const contentHtml = await renderToStringAsync(element)
-  await getDataFromTree(element)
 
   const helmet = Helmet.renderStatic()
   const initialState = JSON.stringify(client.extract())
@@ -72,7 +67,7 @@ async function render(pageContext: PageContext) {
   const colorModeScriptHtml = renderToStaticMarkup(
     <ColorModeScript initialColorMode={cookies.get('chakra-ui-color-mode')} />
   )
-  const chunks = emotion.extractCriticalToChunks(contentHtml)
+  const chunks = emotion.extractCriticalToChunks(page)
 
   return html`
     <!DOCTYPE html>

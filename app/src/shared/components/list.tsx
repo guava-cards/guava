@@ -72,7 +72,7 @@ export function List<ItemType>({
   const isLoading = loading && isEmpty
   const isError = isEmpty && error
 
-  console.log(data, connection, nodes)
+  console.log(nodes)
 
   const renderListItem = (node: ItemType, index: number): React.ReactNode => {
     if (ItemComponent) return <ItemComponent item={node} index={index} />

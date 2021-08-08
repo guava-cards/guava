@@ -10,7 +10,7 @@ import { visualizer } from 'rollup-plugin-visualizer'
 // https://vitejs.dev/config/
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
-  plugins: [reactRefresh(), reactJsx(), VitePWA(), ssr()],
+  plugins: [reactRefresh(), reactJsx(), VitePWA()],
   optimizeDeps: {
     exclude: ['lodash.mergeWith', 'tinycolor2'],
   },

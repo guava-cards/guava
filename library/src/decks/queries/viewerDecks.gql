@@ -1,9 +1,11 @@
 query ViewerDecks($first: Int = 15, $after: String) {
   viewer {
+    id
     decks(first: $first, after: $after) {
       edges {
         cursor
         node {
+          id
           ...DeckRow_deck
         }
       }

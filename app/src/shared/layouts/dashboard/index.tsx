@@ -26,12 +26,10 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       <Head title="🏡 Home" />
       {console.log(withBreadcrumbs)}
       {withSidebar && <DashboardSidebar />}
-      <Suspense fallback={<DashboardLoading />}>
-        <Box w="full" ml={withSidebar ? SIDEBAR_WIDTH : 0} px={4} py={1}>
-          {withNavigation && <DashboardHeader breadcrumbs={withBreadcrumbs} />}
-          {children}
-        </Box>
-      </Suspense>
+      <Box w="full" ml={withSidebar ? SIDEBAR_WIDTH : 0} px={4} py={1}>
+        {withNavigation && <DashboardHeader breadcrumbs={withBreadcrumbs} />}
+        {children}
+      </Box>
     </Box>
   </BreadcrumbsProvider>
 )

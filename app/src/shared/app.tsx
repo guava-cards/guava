@@ -14,10 +14,12 @@ import { DynamicColorMode } from './theme/DynamicColorMode'
 import { AppFallback } from './app-fallback'
 import { GlobalStyles } from './components/global-styles'
 import { Routes } from './app-routes'
-import { Suspense } from './components/suspense'
 import { Head } from './components/head'
 import { ErrorFallback } from './components/error-fallback'
 import { useIsServerSide } from './hooks/use-is-server'
+import { ssrWindow } from './utils/mock-window'
+import { ssrDocument } from './utils/mock-document'
+import { environment } from './theme/environment'
 
 interface AppProps {
   cookies?: string
@@ -50,29 +52,24 @@ export const App: React.FC<AppProps> = ({ cookies, children }) => {
     <React.StrictMode>
       <Head />
       <CookiesProvider cookies={new Cookies(cookies)}>
-        <ChakraProvider
-          theme={theme}
-          colorModeManager={cookieStorageManager(cookies)}
-        >
-          <DynamicColorMode>
-            <ErrorBoundary
-              FallbackComponent={ErrorFallback}
-              key={pathname}
-              resetKeys={[pathname]}
-            >
-              {restoringCache ? (
-                <AppFallback />
-              ) : (
-                <Suspense fallback={<AppFallback />}>
-                  <AuthProvider>
-                    <Routes>{children}</Routes>
-                  </AuthProvider>
-                </Suspense>
-              )}
-            </ErrorBoundary>
-          </DynamicColorMode>
-          <GlobalStyles />
-        </ChakraProvider>
+        <AuthProvider>
+          <ChakraProvider
+            theme={theme}
+            colorModeManager={cookieStorageManager(cookies)}
+            environment={environment}
+          >
+            <DynamicColorMode>
+              <ErrorBoundary
+                FallbackComponent={ErrorFallback}
+                key={pathname}
+                resetKeys={[pathname]}
+              >
+                {restoringCache ? <AppFallback /> : <Routes>{children}</Routes>}
+              </ErrorBoundary>
+            </DynamicColorMode>
+            <GlobalStyles />
+          </ChakraProvider>
+        </AuthProvider>
       </CookiesProvider>
     </React.StrictMode>
   )
