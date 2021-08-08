@@ -1,3 +1,4 @@
+import { RouteConfig } from '~/shared/typings/global'
 import { paths } from '../shared/paths'
 import { Login } from './views/login'
 

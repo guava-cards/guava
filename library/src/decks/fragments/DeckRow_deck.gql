@@ -1,0 +1,9 @@
+fragment DeckRow_deck on Deck {
+  id
+  visibilityMode
+  emoji
+  emojiAlt
+  description
+  createdAt
+  name
+}

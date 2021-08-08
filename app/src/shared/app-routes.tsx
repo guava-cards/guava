@@ -1,19 +1,29 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { Switch, Route } from 'react-router-dom'
-import { lazy } from '@loadable/component'
 import { wrapInLayout } from './layouts'
 import { HomePage } from './views'
 import { NotFound } from './views/not-found'
 import { routes as authRoutes } from '../auth/routes'
-import { Suspense } from './components/suspense'
+import { routes as decksRoutes } from '../decks/routes'
 import { ProtectedRoute } from './components/protected-route'
+import { AppFallback } from './app-fallback'
 
-export const routes = [...authRoutes].map(route => {
+export const routes = [...authRoutes, ...decksRoutes].map(route => {
   const FallbackComponent = route.Component ? route.Component : null
   const Component = route.importComponent
-    ? lazy(route.importComponent)
+    ? lazy(async () => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const component = await route.importComponent!()
+        return { default: component }
+      })
     : FallbackComponent
   if (!Component) return null
+
+  const page = wrapInLayout(
+    Component,
+    route.layout ?? 'without-navigation',
+    route.layoutProps
+  )
 
   return (
     <Route
@@ -22,16 +32,13 @@ export const routes = [...authRoutes].map(route => {
       exact={route.exact}
       sensitive={route.sensitive}
     >
-      <Suspense fallback={<div>Loading.....</div>}>
-        <Component />
-      </Suspense>
+      <Suspense fallback={<AppFallback />}>{page}</Suspense>
     </Route>
   )
 })
 
-export const Routes: React.FC = ({ children }) => (
+export const AppRoutes: React.FC = () => (
   <Switch>
-    {children}
     <ProtectedRoute
       exact
       path="/"

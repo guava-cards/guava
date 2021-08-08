@@ -14,7 +14,8 @@ import {
   InputControl,
   SubmitButton,
 } from 'formik-chakra-ui'
-import { useAuth as useFirebaseAuth } from 'reactfire'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { firebaseAuth as auth } from '~/shared/firebase'
 import { Form, FormSubmit } from '~/shared/components/form'
 
 interface LoginFormProps extends BoxProps {
@@ -35,7 +36,6 @@ export const LoginForm = ({
   setStep,
   ...props
 }: LoginFormProps) => {
-  const auth = useFirebaseAuth()
   const [upsertUser] = useUpsertUserMutation()
   const [checkIfUserExists] = useIdentityCheckMutation()
 
@@ -73,7 +73,7 @@ export const LoginForm = ({
       }
 
       if (step === LoginFormSteps.SIGN_IN) {
-        await auth.signInWithEmailAndPassword(email, password as string)
+        await signInWithEmailAndPassword(auth, email, password as string)
         const { data, errors } = await upsertUser()
 
         const viewer = data?.upsertUser?.user

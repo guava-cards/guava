@@ -1,24 +1,9 @@
 /* eslint-disable no-underscore-dangle */
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-} from 'react'
-import { useCookies } from 'react-cookie'
-import { useAuth as useFirebaseAuth } from 'reactfire'
-import type firebase from 'firebase'
-import {
-  MeFragment,
-  useViewerQuery,
-  AuthenticationError,
-  persistor,
-} from '@guava/library'
+import React, { createContext, useContext, useState, useEffect } from 'react'
+import { MeFragment, useViewerQuery, AuthenticationError } from '@guava/library'
 import { AppFallback } from '~/shared/app-fallback'
 
 export interface AuthContextValue {
-  idToken?: string
   viewer?: MeFragment
   initializing?: boolean
   setViewer: (viewer: MeFragment) => void
@@ -27,33 +12,11 @@ export interface AuthContextValue {
 export const AuthContext = createContext({} as AuthContextValue)
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const firebaseAuth = useFirebaseAuth()
-  const [{ idToken }, setCookie, removeCookie] = useCookies(['idToken'])
-  const { data, loading, refetch } = useViewerQuery({
+  const { data, loading } = useViewerQuery({
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-and-network',
   })
   const [viewer, setViewer] = useState(() => data?.viewer)
-
-  const setIdToken = useCallback(
-    async (user: firebase.User | null) => {
-      const newToken = await user?.getIdToken(true)
-      if (newToken) {
-        setCookie('idToken', newToken, { path: '/', sameSite: 'strict' })
-        refetch()
-      } else {
-        persistor.purge()
-        removeCookie('idToken')
-        setViewer(undefined)
-      }
-    },
-    [setCookie, refetch, removeCookie]
-  )
-
-  useEffect(
-    () => firebaseAuth.onIdTokenChanged(setIdToken),
-    [firebaseAuth, setIdToken]
-  )
 
   useEffect(() => {
     setViewer(data?.viewer)
@@ -64,7 +27,6 @@ export const AuthProvider: React.FC = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        idToken,
         viewer,
         setViewer,
         initializing,

@@ -6,11 +6,10 @@ An online spaced-repition learning platform 📚
 
 | Codebase                       |      Description     |
 |--------------------------------|:--------------------:|
-| [app](./app/README.md)         |  Vite/React Web App  |
+| [app](./app/README.md)         | Create React Web App |
 | [backend](./backend/README.md) |     Rails Backend    |
 | [library](./library/README.md) | Shared frontend code |
-| [native](./native/README.md)   |   React Native App   |
-| [desktop](./desktop/README.md) |     Electron App     |
+
 ## Branches
 
 | Branch    |         Description         |
@@ -32,12 +31,16 @@ The web app is deployed to Vercel, and the backend to Heroku
 
 __Domains__
 
-|                       Domain                       |               Description               |
-|:--------------------------------------------------:|:---------------------------------------:|
-|             [guava.cards](guava.cards)             |           Production Frontend           |
-|     [staging.guava.cards](staging.guava.cards)     |  Staging Frontend (Password Protected)  |
-|         [api.guava.cards](api.guava.cards)         |              Production API             |
-| [staging-api.guava.cards](staging-api.guava.cards) | Staging API (HTTP Basic Authentication) |
+|                       Domain                               |               Description               |
+|:----------------------------------------------------------:|:---------------------------------------:|
+|             [guava.cards](https://guava.cards)             |           Production Frontend           |
+|     [staging.guava.cards](https://staging.guava.cards)     |  Staging Frontend (Password Protected)  |
+|         [api.guava.cards](https://api.guava.cards)         |              Production API             |
+| [staging-api.guava.cards](https://staging-api.guava.cards) | Staging API (HTTP Basic Authentication) |
+
+## Testing
+
+See [TESTING.md](./TESTING.md)
 
 ## License
 

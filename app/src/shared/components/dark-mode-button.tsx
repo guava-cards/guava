@@ -16,7 +16,9 @@ export const DarkModeButton = () => {
       variant="plain"
       border="none"
       w="auto"
-      p="auto"
+      paddingInlineEnd={0}
+      paddingInlineStart={0}
+      p={0}
       outline="none"
     />
   )

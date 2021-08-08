@@ -5,6 +5,7 @@
 import React from 'react'
 import { Box } from '@chakra-ui/react'
 import { Link, LinkProps } from '../../components/link'
+import { paths } from '~/shared/paths'
 
 interface SidebarLinkProps extends LinkProps {
   title: string
@@ -31,7 +32,7 @@ const SidebarLink = ({ title, Icon, to, ...props }: SidebarLinkProps) => {
       flexDir="row"
       alignItems="center"
       className="sidebar-link"
-      exact={false}
+      exact={to === paths.home}
       {...props}
     >
       {icon && <Box mr={2}>{icon}</Box>}

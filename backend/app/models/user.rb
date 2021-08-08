@@ -19,6 +19,8 @@ class User < ApplicationRecord
   rolify
   has_person_name
 
+  has_many :decks, dependent: :destroy
+
   validates :email, presence: true, uniqueness: true
   validates :username, presence: true, uniqueness: true, format: { with: /^[a-zA-Z0-9_.]*$/, multiline: true }
 end

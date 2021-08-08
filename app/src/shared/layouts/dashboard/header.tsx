@@ -25,6 +25,8 @@ export const DashboardHeader = ({
       justifyContent="space-between"
       alignItems="center"
       color="mode.secondary.500"
+      w="full"
+      py={1}
       {...props}
     >
       {breadcrumbs && <Breadcrumbs breadcrumbs={crumbs} />}

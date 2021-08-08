@@ -8,7 +8,7 @@ export const Input: ComponentStyleConfig = {
   sizes: {},
 
   variants: {
-    filled: (props) => ({
+    filled: props => ({
       field: {
         borderWidth: 1,
         borderRadius: '0.25rem',

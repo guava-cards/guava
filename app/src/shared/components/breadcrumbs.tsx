@@ -11,14 +11,30 @@ interface BreadcrumbsProps extends BoxProps {
   breadcrumbs: Breadcrumb[]
 }
 
-const Breadcrumbs = ({ breadcrumbs, ...props }: BreadcrumbsProps) => (
-  <Box as="ul" layerStyle="lists.slash" {...props}>
-    {breadcrumbs.map(crumb => (
-      <Box as="li" key={crumb.title?.toString()}>
-        {crumb.href ? <Link to={crumb.href}>{crumb.title}</Link> : crumb.title}
-      </Box>
-    ))}
-  </Box>
-)
+const Breadcrumbs = ({ breadcrumbs, ...props }: BreadcrumbsProps) => {
+  const content = (crumb: Breadcrumb) => (
+    <>
+      {crumb.emoji && (
+        <Box as="span" aria-hidden="true">
+          {crumb.emoji}&nbsp;&nbsp;
+        </Box>
+      )}
+      {crumb.title}
+    </>
+  )
 
+  return (
+    <Box fontSize="0.8rem" as="ul" layerStyle="lists.slash" {...props}>
+      {breadcrumbs.map(crumb => (
+        <Box as="li" key={crumb.title?.toString()}>
+          {crumb.href ? (
+            <Link to={crumb.href}>{content(crumb)}</Link>
+          ) : (
+            content(crumb)
+          )}
+        </Box>
+      ))}
+    </Box>
+  )
+}
 export { Breadcrumbs }

@@ -1,33 +1,24 @@
-import {
-  ChakraProvider,
-  ColorMode,
-  cookieStorageManager,
-} from '@chakra-ui/react'
-import { Cookies, CookiesProvider } from 'react-cookie'
-import React, { useEffect, useState } from 'react'
+import { ChakraProvider } from '@chakra-ui/react'
+import React, { Suspense, useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { ErrorBoundary } from 'react-error-boundary'
-import { persistor } from '@guava/library'
+import { createApolloClient, persistor } from '@guava/library'
+import { ApolloProvider } from '@apollo/client'
 import { AuthProvider } from '../auth/context'
 import { theme } from './theme'
 import { DynamicColorMode } from './theme/DynamicColorMode'
 import { AppFallback } from './app-fallback'
 import { GlobalStyles } from './components/global-styles'
-import { Routes } from './app-routes'
-import { Suspense } from './components/suspense'
+import { AppRoutes } from './app-routes'
 import { Head } from './components/head'
 import { ErrorFallback } from './components/error-fallback'
-import { useIsServerSide } from './hooks/use-is-server'
+import { Delayed } from './components/delayed'
+import { firebaseAuth } from './firebase'
 
-interface AppProps {
-  cookies?: string
-  initialColorMode?: ColorMode
-}
-
-export const App: React.FC<AppProps> = ({ cookies, children }) => {
+export const App: React.FC = () => {
   const { pathname } = useLocation()
-  const isServerSide = useIsServerSide()
-  const [restoringCache, setRestoringCache] = useState(!isServerSide)
+  const [restoringCache, setRestoringCache] = useState(true)
+
   const restoreCache = async () => {
     setRestoringCache(true)
 
@@ -41,39 +32,44 @@ export const App: React.FC<AppProps> = ({ cookies, children }) => {
     }
   }
 
+  const client = useMemo(() => {
+    const getAuthToken = async () => {
+      if (!firebaseAuth.currentUser) return null
+      return firebaseAuth.currentUser.getIdToken()
+    }
+
+    return createApolloClient({ getAuthToken })
+  }, [])
+
   useEffect(() => {
-    if (isServerSide) return
     restoreCache()
-  }, [isServerSide])
+  }, [])
 
   return (
-    <React.StrictMode>
-      <ErrorBoundary
-        FallbackComponent={ErrorFallback}
-        key={pathname}
-        resetKeys={[pathname]}
-      >
-        <Head />
-        <CookiesProvider cookies={new Cookies(cookies)}>
-          <ChakraProvider
-            theme={theme}
-            colorModeManager={cookieStorageManager(cookies)}
+    <ApolloProvider client={client}>
+      <Head />
+      <ChakraProvider theme={theme}>
+        <DynamicColorMode>
+          <ErrorBoundary
+            FallbackComponent={ErrorFallback}
+            key={pathname}
+            resetKeys={[pathname]}
           >
-            <DynamicColorMode>
-              {restoringCache ? (
-                <AppFallback />
-              ) : (
-                <Suspense fallback={<AppFallback />}>
-                  <AuthProvider>
-                    <Routes>{children}</Routes>
-                  </AuthProvider>
-                </Suspense>
-              )}
-            </DynamicColorMode>
-            <GlobalStyles />
-          </ChakraProvider>
-        </CookiesProvider>
-      </ErrorBoundary>
-    </React.StrictMode>
+            <Suspense fallback={<AppFallback />}>
+              <AuthProvider>
+                {restoringCache ? (
+                  <Delayed>
+                    <AppFallback />
+                  </Delayed>
+                ) : (
+                  <AppRoutes />
+                )}
+              </AuthProvider>
+            </Suspense>
+          </ErrorBoundary>
+        </DynamicColorMode>
+        <GlobalStyles />
+      </ChakraProvider>
+    </ApolloProvider>
   )
 }
