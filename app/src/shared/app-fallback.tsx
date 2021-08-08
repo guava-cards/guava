@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, Spinner, Text } from '@chakra-ui/react'
 import { Delayed } from './components/delayed'
 

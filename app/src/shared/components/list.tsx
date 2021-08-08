@@ -84,6 +84,7 @@ export function List<ItemType>({
   }
 
   const extractKey = (node: ItemType, index: number): string => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const key = keyExtractor?.(node, index) ?? (node as any).id ?? `${index}`
     return key
   }

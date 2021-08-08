@@ -4,7 +4,10 @@ import { RouteConfig } from '~/shared/typings/global'
 export const routes: RouteConfig[] = [
   {
     path: paths.decks.list,
-    importComponent: () => import('./views/index').then(mod => mod.AllDecks),
+    importComponent: () =>
+      import(/* webpackChunkName: "decks--index" */ './views/index').then(
+        mod => mod.AllDecks
+      ),
     layout: 'with-dashboard-sidebar',
     exact: true,
     layoutProps: {
@@ -14,7 +17,10 @@ export const routes: RouteConfig[] = [
   },
   {
     path: paths.decks.detail(),
-    importComponent: () => import('./views/show').then(mod => mod.DetailDeck),
+    importComponent: () =>
+      import(/* webapckChunkName: "decks--show" */ './views/show').then(
+        mod => mod.DetailDeck
+      ),
     layout: 'with-dashboard-sidebar',
     protected: true,
     exact: true,

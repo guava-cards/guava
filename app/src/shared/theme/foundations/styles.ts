@@ -1,7 +1,7 @@
 import { mode, Styles } from '@chakra-ui/theme-tools'
 
 export const styles: Styles = {
-  global: (props) => ({
+  global: props => ({
     body: {
       bg: mode('snow.500', 'charcoal.500')(props),
       color: mode('black', 'white')(props),

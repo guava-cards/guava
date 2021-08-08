@@ -2,7 +2,7 @@ import { ComponentStyleConfig } from '@chakra-ui/react'
 
 export const Alert: ComponentStyleConfig = {
   parts: ['container', 'title', 'description', 'icon'],
-  baseStyle: (props) => ({
+  baseStyle: props => ({
     container: {
       borderRadius: '0.25rem',
       p: 4,

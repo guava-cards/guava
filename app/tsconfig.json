@@ -1,21 +1,28 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "jsx": "react",
-    "baseUrl": "src",
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
     "skipLibCheck": true,
-    "paths": {
-      "~/*": ["./*"]
-    }
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
   },
-  "ts-node": {
-    "transpileOnly": true,
-    "compilerOptions": {
-      "module": "CommonJS",
-      "esModuleInterop": true,
-      "skipLibCheck": true
-    }
-  },
-  "include": ["./src", "vite.config.ts", "./server", "jest.config.js"],
-  "exclude": ["**/node_modules/**/*", "node_modules/**/*", "../node_modules/**/*"]
+  "include": [
+    "src",
+    "./craco.config.js"
+  ]
 }

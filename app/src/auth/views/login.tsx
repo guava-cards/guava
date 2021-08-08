@@ -1,5 +1,5 @@
 import { Box, Heading } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import { Head } from '~/shared/components/head'
 import { paths } from '~/shared/paths'

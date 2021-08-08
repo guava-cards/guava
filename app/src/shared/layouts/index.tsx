@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react'
-import { ViewLayout } from '../typings/global'
+import { Fragment } from 'react'
+import { ViewLayout } from '../typings'
 import { DashboardLayout } from './dashboard'
 
 export const LayoutComponentMap: Record<ViewLayout, React.ComponentType> = {

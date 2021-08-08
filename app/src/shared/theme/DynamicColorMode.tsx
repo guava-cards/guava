@@ -1,5 +1,4 @@
 import { ThemeProvider, useColorMode, useTheme } from '@chakra-ui/react'
-import React from 'react'
 
 export const DynamicColorMode: React.FC = ({ children }) => {
   const { colorMode } = useColorMode()

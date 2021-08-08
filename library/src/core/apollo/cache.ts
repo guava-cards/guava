@@ -3,12 +3,7 @@ import { CachePersistor, LocalForageWrapper } from 'apollo3-cache-persist'
 import localforage from 'localforage'
 import { env } from '../env'
 import introspectionResult from '../../generated/introspection-result'
-import { isServerSide } from '../helpers'
 import { typePolicies } from './policies'
-
-declare let window: Window & {
-  __APOLLO_STATE__: Record<string, any>
-}
 
 export const cacheForage = localforage.createInstance({
   driver: localforage.INDEXEDDB,
@@ -21,11 +16,6 @@ export const cache = new InMemoryCache({
   possibleTypes: introspectionResult.possibleTypes,
   typePolicies,
 })
-
-if (!isServerSide()) {
-  const { __APOLLO_STATE__: initialState } = window
-  cache.restore(initialState)
-}
 
 export const persistor = new CachePersistor({
   cache,

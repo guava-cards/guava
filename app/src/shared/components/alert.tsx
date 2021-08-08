@@ -34,11 +34,6 @@ const Alert = ({
   description,
   children,
   messages = [],
-  dismissable,
-  onDismiss,
-  autoDismiss,
-  autoDismissDelay,
-  displayStyle,
   ...props
 }: AlertProps) => {
   const colorSchemes: Record<AlertType, string> = {

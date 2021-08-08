@@ -2,7 +2,7 @@ import { ComponentStyleConfig } from '@chakra-ui/react'
 import { mode } from '@chakra-ui/theme-tools'
 
 export const FormLabel: ComponentStyleConfig = {
-  baseStyle: (props) => ({
+  baseStyle: props => ({
     fontWeight: 'medium',
     fontSize: 'sm',
     mb: 1,

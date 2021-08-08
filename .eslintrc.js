@@ -38,6 +38,7 @@ module.exports = {
           'jest.config.js',
           '*.config.ts',
           'vite.config.ts',
+          '**/config-overrides.js',
         ],
       },
     ],

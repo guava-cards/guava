@@ -1,5 +1,5 @@
 export const env = {
-  API_HOST: import.meta.env.API_HOST,
-  DEV: import.meta.env.DEV,
-  GRAPHQL_API_URL: import.meta.env.VITE_GRAPHQL_API_URL,
+  API_HOST: process.env.API_HOST,
+  DEV: process.env.NODE_ENV === 'development',
+  GRAPHQL_API_URL: process.env.REACT_APP_GRAPHQL_API_URL,
 }

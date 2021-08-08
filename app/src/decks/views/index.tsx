@@ -1,5 +1,5 @@
 import { Box, Heading } from '@chakra-ui/react'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useViewerDecksQuery } from '@guava/library'
 import { useBreadcrumbs } from '~/shared/context/breadcrumbs'
 import { useFirstRender } from '~/shared/hooks/use-first-render'
@@ -14,8 +14,10 @@ export const AllDecks = () => {
   })
 
   useEffect(() => {
+    if (!firstRender) return
     addCrumb('Decks', paths.decks.list, { emoji: '🗃' })
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [firstRender])
 
   const deckConnection = data?.viewer?.decks
 

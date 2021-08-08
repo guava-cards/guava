@@ -5,6 +5,8 @@ import { AuthenticationError, NotFoundError } from '@guava/library'
 import { NotFound } from '../views/not-found'
 import { paths } from '../paths'
 
+const isDev = process.env.NODE_ENV === 'development'
+
 export const ErrorFallback: React.FC<FallbackProps> = ({
   error,
   resetErrorBoundary,
@@ -30,7 +32,7 @@ export const ErrorFallback: React.FC<FallbackProps> = ({
     return <NotFound />
   }
 
-  if (import.meta.env.DEV) {
+  if (isDev) {
     // eslint-disable-next-line no-console
     console.warn(error)
 

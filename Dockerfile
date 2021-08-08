@@ -1,21 +1,3 @@
-# ARG NODE_VERSION
-
-# FROM node:${NODE_VERSION}-alpine
-
-
-
-# RUN mkdir -p ${ROOT_PATH}
-# WORKDIR ${ROOT_PATH}
-
-# RUN mkdir -p library && mkdir -p app
-
-# COPY library/package.json ./library/package.json
-# COPY app/package.json ./app/package.json
-
-# RUN yarn install --pure-lockfile --production
-
-
-
 ARG NODE_VERSION
 
 # --- Base Node ---
@@ -54,6 +36,11 @@ FROM source as production
 
 RUN yarn workspace @guava/app build
 
-EXPOSE 8000
-ENTRYPOINT [ "yarn" ]
-CMD [ "start:app" ]
+# -- Nginx server -- #
+
+FROM nginx:alpine as server
+COPY --from=production /var/guava/app/build /var/www
+COPY nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80
+
+CMD [ "nginx", "-g", "daemon off;" ]

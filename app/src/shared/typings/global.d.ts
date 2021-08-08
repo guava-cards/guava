@@ -1,11 +1,11 @@
 import { DashboardLayoutProps } from '../layouts/dashboard'
 
-declare type ViewLayout =
+export type ViewLayout =
   | 'with-dashboard-sidebar'
   | 'without-navigation'
   | 'marketing'
 
-declare interface RouteConfig {
+export interface RouteConfig {
   path: string
   exact?: boolean
   sensitive?: boolean
