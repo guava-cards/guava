@@ -33,7 +33,7 @@ module.exports = {
   },
 
   eslint: {
-    enable: true,
+    enable: process.env.NODE_ENV === 'development', // no need to check in production, CI will
     configure: eslintConfig,
   },
 
