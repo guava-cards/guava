@@ -4,6 +4,7 @@ import localforage from 'localforage'
 import { env } from '../env'
 import introspectionResult from '../../generated/introspection-result'
 import { isServerSide } from '../helpers'
+import { typePolicies } from './policies'
 
 declare let window: Window & {
   __APOLLO_STATE__: Record<string, any>
@@ -18,6 +19,7 @@ export const storage = new LocalForageWrapper(cacheForage)
 
 export const cache = new InMemoryCache({
   possibleTypes: introspectionResult.possibleTypes,
+  typePolicies,
 })
 
 if (!isServerSide()) {
